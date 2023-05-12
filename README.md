@@ -84,6 +84,41 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 202
 +-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
 ```
 
+# Install
+
+### Homebrew
+
+```bash
+$ brew tap guessi/tap && brew install eks-ami-finder
+```
+
+### For non-Homebrew users, click `Details` to view more methods.
+
+<details>
+
+### For Linux users
+
+```bash
+$ curl -fsSL https://github.com/guessi/eks-ami-finder/releases/latest/download/eks-ami-finder-Linux-$(uname -m).tar.gz -o - | tar zxvf -
+$ mv ./eks-ami-finder /usr/local/bin/eks-ami-finder
+```
+
+### For macOS users
+
+```bash
+$ curl -fsSL https://github.com/guessi/eks-ami-finder/releases/latest/download/eks-ami-finder-Darwin-$(uname -m).tar.gz -o - | tar zxvf -
+$ mv ./eks-ami-finder /usr/local/bin/eks-ami-finder
+```
+
+### For Windows users
+
+```powershell
+PS> $SRC = 'https://github.com/guessi/eks-ami-finder/releases/latest/download/eks-ami-finder-Windows-x86_64.tar.gz'
+PS> $DST = 'C:\Temp\eks-ami-finder-Windows-x86_64.tar.gz'
+PS> Invoke-RestMethod -Uri $SRC -OutFile $DST
+```
+</details>
+
 # License
 
 [Apache-2.0](LICENSE)
