@@ -13,7 +13,7 @@ retrieve Amazon EKS AMI with filters
 ```bash
 $ eks-ami-finder --version
 
-eks-ami-finder version 1.0.0
+eks-ami-finder version 1.0.2
 ```
 
 ```bash
