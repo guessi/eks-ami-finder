@@ -46,120 +46,60 @@ GLOBAL OPTIONS:
 # Sample Output
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 2023
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 2023 # for all 1.27 AMIs released in 2023
 ```
 
 <details>
 <summary>Click to expand!</summary>
 
 ```
-+-----------+-----------------------+--------------------------------+---------------------------------------------------------------------------------------------------------------------------------+
-| Region    | AMI ID                | Name                           | Description                                                                                                                     |
-+-----------+-----------------------+--------------------------------+---------------------------------------------------------------------------------------------------------------------------------+
-| us-east-1 | ami-0cbbb5a8c6f670bb6 | amazon-eks-node-1.24-v20230816 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.15, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-06f28e19c3ba73ef7 | amazon-eks-node-1.24-v20230728 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.15, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-08a2e6a8e82737230 | amazon-eks-node-1.24-v20230711 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.15, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-09e3c1f18094d099d | amazon-eks-node-1.24-v20230703 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-08c95f33fc51670df | amazon-eks-node-1.24-v20230607 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-0ea1e9d29dabc105b | amazon-eks-node-1.24-v20230526 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-08f0666b83a9a3cb9 | amazon-eks-node-1.24-v20230513 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-01b58531bffcd77d0 | amazon-eks-node-1.24-v20230509 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-0805526053854501b | amazon-eks-node-1.24-v20230501 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-0ce0bc9be2a044a29 | amazon-eks-node-1.24-v20230411 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-02f5ecb082b74cd86 | amazon-eks-node-1.24-v20230406 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.19-1.amzn2.0.1) |
-| us-east-1 | ami-0733d88d7fb98418c | amazon-eks-node-1.24-v20230322 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.6-1.amzn2.0.2)  |
-| us-east-1 | ami-0b4795e99297c2650 | amazon-eks-node-1.24-v20230304 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.10, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.6-1.amzn2.0.2)  |
-| us-east-1 | ami-01ced323515f177b0 | amazon-eks-node-1.24-v20230217 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.10, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.6-1.amzn2.0.2)  |
-| us-east-1 | ami-06bf8e441ff8de6c6 | amazon-eks-node-1.24-v20230203 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.9, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.6-1.amzn2.0.2)   |
-| us-east-1 | ami-08794756cd16cd445 | amazon-eks-node-1.24-v20230127 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.9, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.6-1.amzn2.0.2)   |
-| us-east-1 | ami-06c9b6a12f5bd0a96 | amazon-eks-node-1.24-v20230105 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.7, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.6-1.amzn2.0.2)   |
-+-----------+-----------------------+--------------------------------+---------------------------------------------------------------------------------------------------------------------------------+
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
+| Region    | AMI ID                | Name                           | Description                                                                         |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
+| us-east-1 | ami-0474c5fe3b15d9685 | amazon-eks-node-1.27-v20231002 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.5, containerd: 1.6.*) |
+| us-east-1 | ami-0c92ea9c7c0380b66 | amazon-eks-node-1.27-v20230919 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.5, containerd: 1.6.*) |
+| us-east-1 | ami-013895b64fa9cbcba | amazon-eks-node-1.27-v20230825 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.4, containerd: 1.6.*) |
+| us-east-1 | ami-080632d422a0f7cc5 | amazon-eks-node-1.27-v20230816 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.3, containerd: 1.6.*) |
+| us-east-1 | ami-0bc4534a93057f9fb | amazon-eks-node-1.27-v20230728 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.3, containerd: 1.6.*) |
+| us-east-1 | ami-0ae32cfe425c3643a | amazon-eks-node-1.27-v20230711 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.3, containerd: 1.6.*) |
+| us-east-1 | ami-061112afff4339a5f | amazon-eks-node-1.27-v20230703 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.1, containerd: 1.6.*) |
+| us-east-1 | ami-0fe06c902df3a937b | amazon-eks-node-1.27-v20230607 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.1, containerd: 1.6.*) |
+| us-east-1 | ami-0b94943bd76cb55c2 | amazon-eks-node-1.27-v20230526 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.1, containerd: 1.6.*) |
+| us-east-1 | ami-0e38f9978e7cac6dc | amazon-eks-node-1.27-v20230513 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.1, containerd: 1.6.*) |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
 ```
 </details>
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 202304
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 202308 # for specific month
 ```
 
 <details>
 <summary>Click to expand!</summary>
 
 ```
-+-----------+-----------------------+--------------------------------+---------------------------------------------------------------------------------------------------------------------------------+
-| Region    | AMI ID                | Name                           | Description                                                                                                                     |
-+-----------+-----------------------+--------------------------------+---------------------------------------------------------------------------------------------------------------------------------+
-| us-east-1 | ami-0ce0bc9be2a044a29 | amazon-eks-node-1.24-v20230411 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.*)              |
-| us-east-1 | ami-02f5ecb082b74cd86 | amazon-eks-node-1.24-v20230406 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.19-1.amzn2.0.1) |
-+-----------+-----------------------+--------------------------------+---------------------------------------------------------------------------------------------------------------------------------+
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
+| Region    | AMI ID                | Name                           | Description                                                                         |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
+| us-east-1 | ami-013895b64fa9cbcba | amazon-eks-node-1.27-v20230825 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.4, containerd: 1.6.*) |
+| us-east-1 | ami-080632d422a0f7cc5 | amazon-eks-node-1.27-v20230816 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.3, containerd: 1.6.*) |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
 ```
 </details>
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 202305
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 20230825 # for specific date
 ```
 
 <details>
 <summary>Click to expand!</summary>
 
 ```
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| Region    | AMI ID                | Name                           | Description                                                                                                        |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| us-east-1 | ami-0ea1e9d29dabc105b | amazon-eks-node-1.24-v20230526 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-| us-east-1 | ami-08f0666b83a9a3cb9 | amazon-eks-node-1.24-v20230513 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-| us-east-1 | ami-01b58531bffcd77d0 | amazon-eks-node-1.24-v20230509 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-| us-east-1 | ami-0805526053854501b | amazon-eks-node-1.24-v20230501 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.11, docker: 20.10.17-1.amzn2.0.1, containerd: 1.6.*) |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-```
-</details>
-
-```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 202306
-```
-
-<details>
-<summary>Click to expand!</summary>
-
-```
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| Region    | AMI ID                | Name                           | Description                                                                                                        |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| us-east-1 | ami-08c95f33fc51670df | amazon-eks-node-1.24-v20230607 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-```
-</details>
-
-```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 202307
-```
-
-<details>
-<summary>Click to expand!</summary>
-
-```
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| Region    | AMI ID                | Name                           | Description                                                                                                        |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| us-east-1 | ami-06f28e19c3ba73ef7 | amazon-eks-node-1.24-v20230728 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.15, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-| us-east-1 | ami-08a2e6a8e82737230 | amazon-eks-node-1.24-v20230711 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.15, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-| us-east-1 | ami-09e3c1f18094d099d | amazon-eks-node-1.24-v20230703 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.13, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-```
-</details>
-
-```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.24 --release-date 202308
-```
-
-<details>
-<summary>Click to expand!</summary>
-
-```
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| Region    | AMI ID                | Name                           | Description                                                                                                        |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
-| us-east-1 | ami-0cbbb5a8c6f670bb6 | amazon-eks-node-1.24-v20230816 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.15, docker: 20.10.23-1.amzn2.0.1, containerd: 1.6.*) |
-+-----------+-----------------------+--------------------------------+--------------------------------------------------------------------------------------------------------------------+
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
+| Region    | AMI ID                | Name                           | Description                                                                         |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
+| us-east-1 | ami-013895b64fa9cbcba | amazon-eks-node-1.27-v20230825 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.27.4, containerd: 1.6.*) |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+
 ```
 </details>
 
