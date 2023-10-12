@@ -46,7 +46,10 @@ GLOBAL OPTIONS:
 # Sample Output
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 2023 # for all 1.27 AMIs released in 2023
+$ eks-ami-finder \
+      --region us-east-1 \
+      --kubernetes-version 1.27 \
+      --release-date 2023 # for all 1.27 AMIs released in 2023
 ```
 
 <details>
@@ -71,7 +74,10 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 202
 </details>
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 202308 # for specific month
+$ eks-ami-finder \
+      --region us-east-1 \
+      --kubernetes-version 1.27 \
+      --release-date 202308 # for specific month
 ```
 
 <details>
@@ -88,7 +94,10 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 202
 </details>
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.27 --release-date 20230825 # for specific date
+$ eks-ami-finder \
+      --region us-east-1 \
+      --kubernetes-version 1.27 \
+      --release-date 20230825 # for specific date
 ```
 
 <details>
