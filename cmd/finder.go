@@ -66,6 +66,7 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, inc
 		"Name",
 		"Description",
 		"Creation Date",
+		"DeprecationTime",
 	})
 
 	// tricky trick to sort AMI by creation date
@@ -73,7 +74,7 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, inc
 	t.SetColumnConfigs([]table.ColumnConfig{{Name: "Creation Date", Hidden: true}})
 
 	for _, image := range amis.Images {
-		t.AppendRow(table.Row{region, *image.ImageId, *image.Name, *image.Description, *image.CreationDate})
+		t.AppendRow(table.Row{region, *image.ImageId, *image.Name, *image.Description, *image.CreationDate, *image.DeprecationTime})
 	}
 
 	t.Style().Format.Header = text.FormatDefault
