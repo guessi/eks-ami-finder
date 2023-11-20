@@ -1,3 +1,9 @@
+# v1.0.5 / 2023-11-20
+
+* Introduce `--max-results` flag
+* Add paginator support for DescribeImages()
+* Include `DeprecationTime` info in the output
+
 # v1.0.4 / 2023-10-12
 
 * Set default version to 1.28
