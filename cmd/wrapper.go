@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/guessi/eks-ami-finder/pkg/constants"
@@ -14,6 +15,7 @@ func Wrapper(c *cli.Context) {
 	amiType := c.String("ami-type")
 	kubernetesVersion := c.String("kubernetes-version")
 	releaseDate := c.String("release-date")
+	maxResults, _ := strconv.Atoi(c.String("max-results"))
 	includeDeprecated := c.Bool("include-deprecated")
 	debugMode := c.Bool("debug")
 
@@ -40,6 +42,7 @@ func Wrapper(c *cli.Context) {
 		amiType,
 		kubernetesVersion,
 		releaseDate,
+		maxResults,
 		includeDeprecated,
 		debugMode,
 	)

@@ -17,7 +17,35 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
-func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, includeDeprecated, debug bool) {
+func findAMIMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input *ec2.DescribeImagesInput, maxResults int) ([]types.Image, error) {
+	var images []types.Image
+	var returnSize int
+
+	paginator := ec2.NewDescribeImagesPaginator(svc, input)
+	for paginator.HasMorePages() {
+		out, err := paginator.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+		images = append(images, out.Images...)
+		if len(images) > maxResults {
+			break
+		}
+	}
+
+	returnSize = maxResults
+	if len(images) < maxResults {
+		returnSize = len(images)
+	}
+	return images[:returnSize], nil
+}
+
+func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, maxResults int, includeDeprecated, debug bool) {
+	// do nothing if maxResults is invalid input
+	if maxResults <= 0 {
+		log.Fatalf("Can not pass --max-results with a value lower or equal to 0.\n")
+	}
+
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
 		config.WithRegion(region),
@@ -45,12 +73,13 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, inc
 		},
 	}
 
-	// NICE-TO-HAVE: should have pagination support
-	amis, err := svc.DescribeImages(context.TODO(), &ec2.DescribeImagesInput{
+	input := ec2.DescribeImagesInput{
 		Filters:           filters,
 		NextToken:         nil,
 		IncludeDeprecated: aws.Bool(includeDeprecated),
-	})
+	}
+
+	images, err := findAMIMatches(context.TODO(), svc, &input, maxResults)
 	if err != nil {
 		var re *awshttp.ResponseError
 		if errors.As(err, &re) {
@@ -73,7 +102,7 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, inc
 	t.SortBy([]table.SortBy{{Name: "Creation Date", Mode: table.Dsc}})
 	t.SetColumnConfigs([]table.ColumnConfig{{Name: "Creation Date", Hidden: true}})
 
-	for _, image := range amis.Images {
+	for _, image := range images {
 		t.AppendRow(table.Row{region, *image.ImageId, *image.Name, *image.Description, *image.CreationDate, *image.DeprecationTime})
 	}
 

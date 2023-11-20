@@ -45,6 +45,12 @@ var Flags = []cli.Flag{
 		Value:    false,
 		Required: false,
 	},
+	&cli.StringFlag{
+		Name:     "max-results",
+		Aliases:  []string{"n"},
+		Value:    "20",
+		Required: false,
+	},
 	&cli.BoolFlag{
 		Name:     "debug",
 		Value:    false,
