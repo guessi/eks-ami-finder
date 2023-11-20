@@ -31,13 +31,13 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, inc
 	pattern := fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappings[amiType], kubernetesVersion, releaseDate)
 
 	filters := []types.Filter{
-		types.Filter{
+		{
 			Name: aws.String("owner-id"),
 			Values: []string{
 				ownerId,
 			},
 		},
-		types.Filter{
+		{
 			Name: aws.String("name"),
 			Values: []string{
 				pattern,
