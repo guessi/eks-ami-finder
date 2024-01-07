@@ -3,7 +3,7 @@ package constants
 const (
 	NAME    string = "eks-ami-finder"
 	USAGE   string = "retrieve Amazon EKS AMI with filters"
-	VERSION string = "1.0.5"
+	VERSION string = "1.0.6"
 )
 
 var (

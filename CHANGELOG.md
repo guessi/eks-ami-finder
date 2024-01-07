@@ -1,3 +1,7 @@
+# v1.0.6 / 2024-01-07
+
+* Dependencies update
+
 # v1.0.5 / 2023-11-20
 
 * Introduce `--max-results` flag
