@@ -1,3 +1,11 @@
+<!-- markdownlint-disable -->
+
+# v1.0.7 / 2024-01-27
+
+* Support new region - Calgary (ca-west-1)
+* Set default version to 1.29
+* Dependencies update
+
 # v1.0.6 / 2024-01-07
 
 * Dependencies update
