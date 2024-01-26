@@ -35,7 +35,7 @@ GLOBAL OPTIONS:
    --region value, -r value              Region for the AMI (default: "us-east-1")
    --owner-id value, -o value            Owner ID of the AMI
    --ami-type value, -t value            x86_64, x86_64-gpu, arm64 (default: "x86_64")
-   --kubernetes-version value, -V value  Kubernetes version for AMI (default: "1.28")
+   --kubernetes-version value, -V value  Kubernetes version for AMI (default: "1.29")
    --release-date value, -d value        Release date with [yyyymmdd] date string format
    --include-deprecated                  (default: false)
    --max-results value, -n value         (default: "20")
