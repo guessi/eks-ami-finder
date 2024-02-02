@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/guessi/eks-ami-finder/pkg/constants"
 	"github.com/urfave/cli/v2"
@@ -28,12 +26,6 @@ func Wrapper(c *cli.Context) {
 				amiOwnerId = v
 			}
 		}
-	}
-
-	// if release date string input is invalid, set current month as filter
-	if len(releaseDate) <= 0 || len(releaseDate) > 8 {
-		now := time.Now()
-		releaseDate = fmt.Sprintf("%02d%02d", now.Year(), now.Month())
 	}
 
 	finder(

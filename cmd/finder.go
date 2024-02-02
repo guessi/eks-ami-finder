@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
@@ -44,6 +45,23 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, max
 	// do nothing if maxResults is invalid input
 	if maxResults <= 0 {
 		log.Fatalf("Can not pass --max-results with a value lower or equal to 0.\n")
+	}
+
+	if len(releaseDate) != 0 {
+		// releaseDate is expected to have at least Year included.
+		if len(releaseDate) < 4 || len(releaseDate) > 8 {
+			log.Fatalf("Invalid --release-date passed.\n")
+		}
+
+		// Amazon EKS was first released back at Jun 05, 2018
+		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
+		if r, err := strconv.Atoi(releaseDate); err == nil {
+			if r < 2018 {
+				log.Fatalf("Invalid --release-date passed.\n")
+			}
+		} else {
+			log.Fatalf("Invalid --release-date passed.\n")
+		}
 	}
 
 	cfg, err := config.LoadDefaultConfig(

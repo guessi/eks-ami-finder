@@ -37,7 +37,7 @@ var Flags = []cli.Flag{
 		Name:     "release-date",
 		Aliases:  []string{"d"},
 		Value:    "",
-		Usage:    "Release date with [yyyymmdd] date string format",
+		Usage:    "Release date with [yyyy], [yyyymm] or [yyyymmdd] format",
 		Required: false,
 	},
 	&cli.BoolFlag{
