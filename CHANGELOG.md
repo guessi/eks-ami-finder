@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.0.8 / 2024-02-02
+
+* Loosen check for `--release-date` input
+* Dependencies update
+
 # v1.0.7 / 2024-01-27
 
 * Support new region - Calgary (ca-west-1)
