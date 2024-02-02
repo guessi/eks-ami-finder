@@ -55,17 +55,18 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 202
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 | Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
+| us-east-1 | ami-0fc370be4e6093918 | amazon-eks-node-1.29-v20240129 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-30T18:26:05.000Z |
 | us-east-1 | ami-0c482d7ce1aa0dd44 | amazon-eks-node-1.29-v20240117 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-17T23:44:24.000Z |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 202401 # for all 1.29 AMIs released with specific month
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 20240129 # for all 1.29 AMIs released with specific date
 
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 | Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
-| us-east-1 | ami-0c482d7ce1aa0dd44 | amazon-eks-node-1.29-v20240117 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-17T23:44:24.000Z |
+| us-east-1 | ami-0fc370be4e6093918 | amazon-eks-node-1.29-v20240129 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-30T18:26:05.000Z |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 ```
 
@@ -79,7 +80,7 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 202
 brew tap guessi/tap && brew install eks-ami-finder
 ```
 
-### For non-Homebrew users, click `Details` to view more methods
+### For non-Homebrew users
 
 <details><!-- markdownlint-disable-line -->
 <summary>Click to expand!</summary><!-- markdownlint-disable-line -->
