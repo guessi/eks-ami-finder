@@ -7,35 +7,34 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func Wrapper(c *cli.Context) {
-	amiRegion := c.String("region")
-	amiOwnerId := c.String("owner-id")
-	amiType := c.String("ami-type")
-	kubernetesVersion := c.String("kubernetes-version")
-	releaseDate := c.String("release-date")
+func amiSearchInput(c *cli.Context) amiSearchInputSpec {
 	maxResults, _ := strconv.Atoi(c.String("max-results"))
-	includeDeprecated := c.Bool("include-deprecated")
-	debugMode := c.Bool("debug")
+
+	return amiSearchInputSpec{
+		AWS_REGION:         c.String("region"),
+		AMI_OWNER_ID:       c.String("owner-id"),
+		AMI_TYPE:           c.String("ami-type"),
+		KUBERNETES_VERSION: c.String("kubernetes-version"),
+		RELEASE_DATE:       c.String("release-date"),
+		MAX_RESULTS:        maxResults,
+		INCLUDE_DEPRECATED: c.Bool("include-deprecated"),
+		DEBUG_MODE:         c.Bool("debug"),
+	}
+}
+
+func Wrapper(c *cli.Context) {
+	r := amiSearchInput(c)
 
 	// if region input but having no ownerId assigned, assume it is loolking for EKS official image build
-	if len(amiRegion) > 0 && len(amiOwnerId) != 12 {
-		amiOwnerId = constants.AwsAccountMappings["*"]
+	if len(r.AWS_REGION) > 0 && len(r.AMI_OWNER_ID) != 12 {
+		r.AMI_OWNER_ID = constants.AwsAccountMappings["*"]
 
 		for k, v := range constants.AwsAccountMappings {
-			if k == amiRegion {
-				amiOwnerId = v
+			if k == r.AWS_REGION {
+				r.AMI_OWNER_ID = v
 			}
 		}
 	}
 
-	finder(
-		amiRegion,
-		amiOwnerId,
-		amiType,
-		kubernetesVersion,
-		releaseDate,
-		maxResults,
-		includeDeprecated,
-		debugMode,
-	)
+	amiSearch(r)
 }

@@ -18,7 +18,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
-func findAMIMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input *ec2.DescribeImagesInput, maxResults int) ([]types.Image, error) {
+func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input *ec2.DescribeImagesInput, maxResults int) ([]types.Image, error) {
 	var images []types.Image
 	var returnSize int
 
@@ -41,21 +41,21 @@ func findAMIMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 	return images[:returnSize], nil
 }
 
-func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, maxResults int, includeDeprecated, debug bool) {
+func amiSearch(input amiSearchInputSpec) {
 	// do nothing if maxResults is invalid input
-	if maxResults <= 0 {
+	if input.MAX_RESULTS <= 0 {
 		log.Fatalf("Can not pass --max-results with a value lower or equal to 0.\n")
 	}
 
-	if len(releaseDate) != 0 {
+	if len(input.RELEASE_DATE) != 0 {
 		// releaseDate is expected to have at least Year included.
-		if len(releaseDate) < 4 || len(releaseDate) > 8 {
+		if len(input.RELEASE_DATE) < 4 || len(input.RELEASE_DATE) > 8 {
 			log.Fatalf("Invalid --release-date passed.\n")
 		}
 
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
-		if r, err := strconv.Atoi(releaseDate); err == nil {
+		if r, err := strconv.Atoi(input.RELEASE_DATE); err == nil {
 			if r < 2018 {
 				log.Fatalf("Invalid --release-date passed.\n")
 			}
@@ -66,7 +66,7 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, max
 
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
-		config.WithRegion(region),
+		config.WithRegion(input.AWS_REGION),
 	)
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
@@ -74,13 +74,13 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, max
 
 	svc := ec2.NewFromConfig(cfg)
 
-	pattern := fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappings[amiType], kubernetesVersion, releaseDate)
+	pattern := fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappings[input.AMI_TYPE], input.KUBERNETES_VERSION, input.RELEASE_DATE)
 
 	filters := []types.Filter{
 		{
 			Name: aws.String("owner-id"),
 			Values: []string{
-				ownerId,
+				input.AMI_OWNER_ID,
 			},
 		},
 		{
@@ -91,13 +91,13 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, max
 		},
 	}
 
-	input := ec2.DescribeImagesInput{
+	describeImagesInput := ec2.DescribeImagesInput{
 		Filters:           filters,
 		NextToken:         nil,
-		IncludeDeprecated: aws.Bool(includeDeprecated),
+		IncludeDeprecated: aws.Bool(input.INCLUDE_DEPRECATED),
 	}
 
-	images, err := findAMIMatches(context.TODO(), svc, &input, maxResults)
+	images, err := findAmiMatches(context.TODO(), svc, &describeImagesInput, input.MAX_RESULTS)
 	if err != nil {
 		var re *awshttp.ResponseError
 		if errors.As(err, &re) {
@@ -120,16 +120,23 @@ func finder(region, ownerId, amiType, kubernetesVersion, releaseDate string, max
 	t.SortBy([]table.SortBy{{Name: "Creation Date", Mode: table.Dsc}})
 	t.SetColumnConfigs([]table.ColumnConfig{{Name: "Creation Date", Hidden: true}})
 
-	for _, image := range images {
-		t.AppendRow(table.Row{region, *image.ImageId, *image.Name, *image.Description, *image.CreationDate, *image.DeprecationTime})
+	for _, i := range images {
+		t.AppendRow(table.Row{
+			input.AWS_REGION,
+			*i.ImageId,
+			*i.Name,
+			*i.Description,
+			*i.CreationDate,
+			*i.DeprecationTime,
+		})
 	}
 
 	t.Style().Format.Header = text.FormatDefault
 	t.Render()
 
-	if debug {
+	if input.DEBUG_MODE {
 		println()
-		print(fmt.Sprintf("OwerId: %s\n", ownerId))
+		print(fmt.Sprintf("OwerId: %s\n", input.AMI_OWNER_ID))
 		print(fmt.Sprintf("Filter: %s\n", pattern))
 	}
 
