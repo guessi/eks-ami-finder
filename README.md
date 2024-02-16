@@ -55,18 +55,21 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 202
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 | Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
+| us-east-1 | ami-061821f70393c7d78 | amazon-eks-node-1.29-v20240213 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-02-13T18:20:59.000Z |
+| us-east-1 | ami-0b9bc6b8474b03237 | amazon-eks-node-1.29-v20240209 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-02-09T23:02:11.000Z |
+| us-east-1 | ami-0a16c02fd2b47c38d | amazon-eks-node-1.29-v20240202 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-02-02T18:20:54.000Z |
 | us-east-1 | ami-0fc370be4e6093918 | amazon-eks-node-1.29-v20240129 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-30T18:26:05.000Z |
 | us-east-1 | ami-0c482d7ce1aa0dd44 | amazon-eks-node-1.29-v20240117 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-17T23:44:24.000Z |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 20240129 # for all 1.29 AMIs released with specific date
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.29 --release-date 20240213 # for all 1.29 AMIs released with specific date
 
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 | Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
-| us-east-1 | ami-0fc370be4e6093918 | amazon-eks-node-1.29-v20240129 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-01-30T18:26:05.000Z |
+| us-east-1 | ami-061821f70393c7d78 | amazon-eks-node-1.29-v20240213 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.29.0, containerd: 1.7.*) | 2026-02-13T18:20:59.000Z |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+
 ```
 
