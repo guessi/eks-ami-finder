@@ -1,9 +1,14 @@
 package constants
 
 const (
-	NAME    string = "eks-ami-finder"
-	USAGE   string = "retrieve Amazon EKS AMI with filters"
-	VERSION string = "1.0.9"
+	NAME  string = "eks-ami-finder"
+	USAGE string = "retrieve Amazon EKS AMI with filters"
+)
+
+var (
+	GitVersion string
+	GoVersion  string
+	BuildTime  string
 )
 
 var (
