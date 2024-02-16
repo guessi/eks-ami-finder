@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.0.9 / 2024-02-16
+
+* Include "Architecture" info
+* Dependencies update
+
 # v1.0.8 / 2024-02-02
 
 * Loosen check for `--release-date` input
