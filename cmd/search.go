@@ -114,6 +114,7 @@ func amiSearch(input amiSearchInputSpec) {
 		"Description",
 		"Creation Date",
 		"DeprecationTime",
+		"Architecture",
 	})
 
 	// tricky trick to sort AMI by creation date
@@ -128,6 +129,7 @@ func amiSearch(input amiSearchInputSpec) {
 			*i.Description,
 			*i.CreationDate,
 			*i.DeprecationTime,
+			i.Architecture,
 		})
 	}
 
