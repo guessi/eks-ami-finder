@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.0.10 / 2024-02-18
+
+* Implement sub-command "version"
+
 # v1.0.9 / 2024-02-16
 
 * Include "Architecture" info
