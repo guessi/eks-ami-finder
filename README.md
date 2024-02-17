@@ -13,7 +13,7 @@ retrieve Amazon EKS AMI with filters
 ```bash
 $ eks-ami-finder --version
 
-eks-ami-finder version 1.0.9
+eks-ami-finder version 1.0.10
 ```
 
 ```bash
@@ -26,7 +26,7 @@ USAGE:
    eks-ami-finder [global options] command [command options] [arguments...]
 
 VERSION:
-   1.0.9
+   1.0.10
 
 COMMANDS:
    help, h  Shows a list of commands or help for one command
