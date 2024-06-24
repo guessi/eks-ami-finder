@@ -12,6 +12,11 @@ var (
 )
 
 var (
+	AmiPrefixMappingsAL2023 = map[string]string{
+		"arm64":  "amazon-eks-node-al2023-x86_64-standard",
+		"x86_64": "amazon-eks-node-al2023-arm64-standard",
+	}
+
 	AmiPrefixMappings = map[string]string{
 		"arm64":      "amazon-eks-arm64-node",
 		"x86_64":     "amazon-eks-node",

@@ -11,37 +11,29 @@ retrieve Amazon EKS AMI with filters
 ## Usage
 
 ```bash
-$ eks-ami-finder --version
-
-eks-ami-finder version 1.0.12
-```
-
-```bash
 $ eks-ami-finder --help
 
 NAME:
    eks-ami-finder - retrieve Amazon EKS AMI with filters
 
 USAGE:
-   eks-ami-finder [global options] command [command options] [arguments...]
-
-VERSION:
-   1.0.12
+   eks-ami-finder [global options] command [command options]
 
 COMMANDS:
-   help, h  Shows a list of commands or help for one command
+   version, v  Print version number
+   help, h     Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --region value, -r value              Region for the AMI (default: "us-east-1")
    --owner-id value, -o value            Owner ID of the AMI
    --ami-type value, -t value            x86_64, x86_64-gpu, arm64 (default: "x86_64")
+   --ami-family value, -f value          AL2, AL2023 (default: "AL2")
    --kubernetes-version value, -V value  Kubernetes version for AMI (default: "1.30")
    --release-date value, -d value        Release date with [yyyy], [yyyymm] or [yyyymmdd] format
    --include-deprecated                  (default: false)
    --max-results value, -n value         (default: "20")
    --debug                               (default: false)
    --help, -h                            show help
-   --version, -v                         print the version
 ```
 
 ## Sample Output

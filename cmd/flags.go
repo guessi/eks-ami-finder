@@ -27,6 +27,13 @@ var Flags = []cli.Flag{
 		Required: false,
 	},
 	&cli.StringFlag{
+		Name:     "ami-family",
+		Aliases:  []string{"f"},
+		Value:    "AL2",
+		Usage:    "AL2, AL2023",
+		Required: false,
+	},
+	&cli.StringFlag{
 		Name:     "kubernetes-version",
 		Aliases:  []string{"V"},
 		Value:    "1.30",

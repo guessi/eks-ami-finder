@@ -14,6 +14,7 @@ func amiSearchInput(c *cli.Context) amiSearchInputSpec {
 		AWS_REGION:         c.String("region"),
 		AMI_OWNER_ID:       c.String("owner-id"),
 		AMI_TYPE:           c.String("ami-type"),
+		AMI_FAMILY:         c.String("ami-family"),
 		KUBERNETES_VERSION: c.String("kubernetes-version"),
 		RELEASE_DATE:       c.String("release-date"),
 		MAX_RESULTS:        maxResults,

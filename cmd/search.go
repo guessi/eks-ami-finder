@@ -47,6 +47,12 @@ func amiSearch(input amiSearchInputSpec) {
 		log.Fatalf("Can not pass --max-results with a value lower or equal to 0.\n")
 	}
 
+	if input.AMI_FAMILY == "AL2023" {
+		if input.AMI_TYPE != "x86_64" && input.AMI_TYPE != "arm64" {
+			log.Fatalf("Invalid combinition %s, %s\n", input.AMI_FAMILY, input.AMI_TYPE)
+		}
+	}
+
 	if len(input.RELEASE_DATE) != 0 {
 		// releaseDate is expected to have at least Year included.
 		if len(input.RELEASE_DATE) < 4 || len(input.RELEASE_DATE) > 8 {
@@ -75,6 +81,9 @@ func amiSearch(input amiSearchInputSpec) {
 	svc := ec2.NewFromConfig(cfg)
 
 	pattern := fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappings[input.AMI_TYPE], input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	if input.AMI_FAMILY == "AL2023" {
+		pattern = fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappingsAL2023[input.AMI_TYPE], input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	}
 
 	filters := []types.Filter{
 		{
