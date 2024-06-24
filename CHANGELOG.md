@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.0.13 / 2024-06-24
+
+* Add support for AL2023 based AMI searching
+
 # v1.0.12 / 2024-06-15
 
 * Set default version to 1.30
