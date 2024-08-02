@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.0.14 / 2024-08-02
+
+* Add support for new region - Kuala Lumpur (ap-southeast-5)
+* Dependencies update
+
 # v1.0.13 / 2024-06-24
 
 * Add support for AL2023 based AMI searching
