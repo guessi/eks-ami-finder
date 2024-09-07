@@ -22,15 +22,8 @@ var Flags = []cli.Flag{
 	&cli.StringFlag{
 		Name:     "ami-type",
 		Aliases:  []string{"t"},
-		Value:    "x86_64",
-		Usage:    "x86_64, x86_64-gpu, arm64",
-		Required: false,
-	},
-	&cli.StringFlag{
-		Name:     "ami-family",
-		Aliases:  []string{"f"},
-		Value:    "AL2",
-		Usage:    "AL2, AL2023",
+		Value:    "AL2_x86_64",
+		Usage:    "AMI Type for the AMI",
 		Required: false,
 	},
 	&cli.StringFlag{

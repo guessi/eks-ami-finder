@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"os"
+	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
@@ -44,30 +45,38 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 func amiSearch(input amiSearchInputSpec) {
 	// do nothing if maxResults is invalid input
 	if input.MAX_RESULTS <= 0 {
-		log.Fatalf("Can not pass --max-results with a value lower or equal to 0.\n")
+		fmt.Println("Can not pass --max-results with a value lower or equal to 0.")
+		os.Exit(1)
 	}
 
-	if input.AMI_FAMILY == "AL2023" {
-		if input.AMI_TYPE != "x86_64" && input.AMI_TYPE != "arm64" {
-			log.Fatalf("Invalid combinition %s, %s\n", input.AMI_FAMILY, input.AMI_TYPE)
-		}
+	if !slices.Contains(constants.ValidAmiTypes, input.AMI_TYPE) {
+		fmt.Printf("Invalid AMI_TYPE input (Valid input: %s)\n", strings.Join(constants.ValidAmiTypes, ", "))
+		os.Exit(1)
 	}
 
 	if len(input.RELEASE_DATE) != 0 {
 		// releaseDate is expected to have at least Year included.
 		if len(input.RELEASE_DATE) < 4 || len(input.RELEASE_DATE) > 8 {
-			log.Fatalf("Invalid --release-date passed.\n")
+			fmt.Println("Invalid --release-date passed.")
+			os.Exit(1)
 		}
 
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
 		if r, err := strconv.Atoi(input.RELEASE_DATE); err == nil {
 			if r < 2018 {
-				log.Fatalf("Invalid --release-date passed.\n")
+				fmt.Println("Invalid --release-date passed.")
+				os.Exit(1)
 			}
 		} else {
-			log.Fatalf("Invalid --release-date passed.\n")
+			fmt.Println("Invalid --release-date passed.")
+			os.Exit(1)
 		}
+	}
+
+	if len(input.RELEASE_DATE) != 0 && strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+		fmt.Println("Bottlerocket don't support filter by release date")
+		os.Exit(1)
 	}
 
 	cfg, err := config.LoadDefaultConfig(
@@ -75,14 +84,43 @@ func amiSearch(input amiSearchInputSpec) {
 		config.WithRegion(input.AWS_REGION),
 	)
 	if err != nil {
-		log.Fatalf("unable to load SDK config, %v", err)
+		fmt.Printf("unable to load SDK config, %v", err)
+		os.Exit(1)
 	}
 
 	svc := ec2.NewFromConfig(cfg)
 
-	pattern := fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappings[input.AMI_TYPE], input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	if input.AMI_FAMILY == "AL2023" {
-		pattern = fmt.Sprintf("%s-%s-v%s*", constants.AmiPrefixMappingsAL2023[input.AMI_TYPE], input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	var pattern string
+
+	switch ami_type := input.AMI_TYPE; ami_type {
+	case "AL2_ARM_64":
+		pattern = fmt.Sprintf("amazon-eks-arm64-node-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "AL2_x86_64":
+		pattern = fmt.Sprintf("amazon-eks-node-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "AL2_x86_64_GPU":
+		pattern = fmt.Sprintf("amazon-eks-gpu-node-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "AL2023_ARM_64_STANDARD":
+		pattern = fmt.Sprintf("amazon-eks-node-al2023-arm64-standard-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "AL2023_x86_64_STANDARD":
+		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-standard-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "BOTTLEROCKET_ARM_64":
+		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-aarch64-v*", input.KUBERNETES_VERSION)
+	case "BOTTLEROCKET_x86_64":
+		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-x86_64-v*", input.KUBERNETES_VERSION)
+	case "BOTTLEROCKET_ARM_64_NVIDIA":
+		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-nvidia-aarch64-v*", input.KUBERNETES_VERSION)
+	case "BOTTLEROCKET_x86_64_NVIDIA":
+		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-nvidia-x86_64-v*", input.KUBERNETES_VERSION)
+	case "WINDOWS_CORE_2019_x86_64":
+		pattern = fmt.Sprintf("Windows_Server-2019-English-Core-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "WINDOWS_FULL_2019_x86_64":
+		pattern = fmt.Sprintf("Windows_Server-2019-English-Full-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "WINDOWS_CORE_2022_x86_64":
+		pattern = fmt.Sprintf("Windows_Server-2022-English-Core-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "WINDOWS_FULL_2022_x86_64":
+		pattern = fmt.Sprintf("Windows_Server-2022-English-Full-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	default:
+		fmt.Println("Invalid AMI_TYPE input")
 	}
 
 	filters := []types.Filter{
@@ -110,8 +148,14 @@ func amiSearch(input amiSearchInputSpec) {
 	if err != nil {
 		var re *awshttp.ResponseError
 		if errors.As(err, &re) {
-			log.Fatalf("requestID: %s, error: %v", re.ServiceRequestID(), re.Unwrap())
+			fmt.Printf("requestID: %s, error: %v", re.ServiceRequestID(), re.Unwrap())
+			os.Exit(1)
 		}
+	}
+
+	if len(images) == 0 {
+		fmt.Println("No matching AMI found.")
+		os.Exit(0)
 	}
 
 	t := table.NewWriter()
