@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.0.15 / 2024-09-09
+
+* Dependencies update
+* Extend support for all AMI TYPEs (AL2/AL2023/BOTTLEROCKET/WINDOWS)
+
 # v1.0.14 / 2024-08-02
 
 * Add support for new region - Kuala Lumpur (ap-southeast-5)
