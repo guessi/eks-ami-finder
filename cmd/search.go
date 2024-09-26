@@ -103,6 +103,10 @@ func amiSearch(input amiSearchInputSpec) {
 		pattern = fmt.Sprintf("amazon-eks-node-al2023-arm64-standard-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
 	case "AL2023_x86_64_STANDARD":
 		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-standard-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "AL2023_x86_64_NEURON":
+		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-neuron-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
+	case "AL2023_x86_64_NVIDIA":
+		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-nvidia-560-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
 	case "BOTTLEROCKET_ARM_64":
 		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-aarch64-v*", input.KUBERNETES_VERSION)
 	case "BOTTLEROCKET_x86_64":
