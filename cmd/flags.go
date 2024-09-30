@@ -29,7 +29,7 @@ var Flags = []cli.Flag{
 	&cli.StringFlag{
 		Name:     "kubernetes-version",
 		Aliases:  []string{"V"},
-		Value:    "1.30",
+		Value:    "1.31",
 		Usage:    "Kubernetes version for AMI",
 		Required: false,
 	},
