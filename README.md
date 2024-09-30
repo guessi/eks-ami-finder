@@ -27,7 +27,7 @@ GLOBAL OPTIONS:
    --region value, -r value              Region for the AMI (default: "us-east-1")
    --owner-id value, -o value            Owner ID of the AMI
    --ami-type value, -t value            AMI Type for the AMI (default: "AL2_x86_64")
-   --kubernetes-version value, -V value  Kubernetes version for AMI (default: "1.30")
+   --kubernetes-version value, -V value  Kubernetes version for AMI (default: "1.31")
    --release-date value, -d value        Release date with [yyyy], [yyyymm] or [yyyymmdd] format
    --include-deprecated                  (default: false)
    --max-results value, -n value         (default: "20")
@@ -42,38 +42,34 @@ GLOBAL OPTIONS:
 <summary>Click to expand!</summary><!-- markdownlint-disable-line -->
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.30 --release-date 2024 # for all 1.30 AMIs released in 2024
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-03413b57906e5c8b2 | amazon-eks-node-1.30-v20240904 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.2, containerd: 1.7.11-*) | 2026-09-04T16:51:50.000Z | x86_64       |
-| us-east-1 | ami-09c00c2e93ce7bd23 | amazon-eks-node-1.30-v20240729 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.2, containerd: 1.7.*)    | 2026-07-29T19:34:25.000Z | x86_64       |
-| us-east-1 | ami-07a876f98b5bdf972 | amazon-eks-node-1.30-v20240703 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.0, containerd: 1.7.*)    | 2026-07-03T16:44:09.000Z | x86_64       |
-| us-east-1 | ami-07a09baf6da06052d | amazon-eks-node-1.30-v20240625 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.0, containerd: 1.7.*)    | 2026-06-25T19:33:57.000Z | x86_64       |
-| us-east-1 | ami-0469fcb2e219afb31 | amazon-eks-node-1.30-v20240531 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.0, containerd: 1.7.*)    | 2026-05-31T16:01:09.000Z | x86_64       |
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-
-```
-
-```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.30 --release-date 202405 # for all 1.30 AMIs released with specific month
-
-+-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
-| Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          | Architecture |
-+-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-0469fcb2e219afb31 | amazon-eks-node-1.30-v20240531 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.0, containerd: 1.7.*) | 2026-05-31T16:01:09.000Z | x86_64       |
-| us-east-1 | ami-0d06f30e8d6e02990 | amazon-eks-node-1.30-v20240522 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.0, containerd: 1.7.*) | 2026-05-23T05:59:52.000Z | x86_64       |
-| us-east-1 | ami-01d267b705a0521d1 | amazon-eks-node-1.30-v20240514 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.0, containerd: 1.7.*) | 2026-05-14T17:03:12.000Z | x86_64       |
-+-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
-```
-
-```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.30 --release-date 20240904 # for all 1.30 AMIs released with specific date
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 2024 # for all 1.31 AMIs released in 2024
 
 +-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
 +-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-03413b57906e5c8b2 | amazon-eks-node-1.30-v20240904 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.30.2, containerd: 1.7.11-*) | 2026-09-04T16:51:50.000Z | x86_64       |
+| us-east-1 | ami-03a66e914971f8646 | amazon-eks-node-1.31-v20240924 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-25T02:01:32.000Z | x86_64       |
+| us-east-1 | ami-00ec84c1189958713 | amazon-eks-node-1.31-v20240917 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-18T06:26:49.000Z | x86_64       |
++-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+```
+
+```bash
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 202409 # for all 1.31 AMIs released with specific month
+
++-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+| Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
++-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+| us-east-1 | ami-03a66e914971f8646 | amazon-eks-node-1.31-v20240924 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-25T02:01:32.000Z | x86_64       |
+| us-east-1 | ami-00ec84c1189958713 | amazon-eks-node-1.31-v20240917 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-18T06:26:49.000Z | x86_64       |
++-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+```
+
+```bash
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 20240924 # for all 1.31 AMIs released with specific date
+
++-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+| Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
++-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+| us-east-1 | ami-03a66e914971f8646 | amazon-eks-node-1.31-v20240924 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-25T02:01:32.000Z | x86_64       |
 +-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
