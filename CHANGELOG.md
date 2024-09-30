@@ -1,5 +1,11 @@
 <!-- markdownlint-disable -->
 
+# v1.0.16 / 2024-09-30
+
+* Set default version to 1.31
+* Dependencies update
+* Extend support for AL2023_x86_64_NEURON and AL2023_x86_64_NVIDIA
+
 # v1.0.15 / 2024-09-09
 
 * Dependencies update
