@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.0.17 / 2024-12-16
+
+* Dependencies update
+
 # v1.0.16 / 2024-09-30
 
 * Set default version to 1.31
