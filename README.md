@@ -86,7 +86,7 @@ A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegro
 ### Homebrew
 
 ```bash
-brew tap guessi/tap && brew install eks-ami-finder
+brew tap guessi/tap && brew update && brew install eks-ami-finder
 ```
 
 ### For non-Homebrew users
