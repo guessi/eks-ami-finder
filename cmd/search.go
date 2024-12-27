@@ -54,29 +54,25 @@ func amiSearch(input amiSearchInputSpec) {
 		os.Exit(1)
 	}
 
-	if len(input.RELEASE_DATE) != 0 {
+	if releaseDate := input.RELEASE_DATE; len(releaseDate) != 0 {
 		// releaseDate is expected to have at least Year included.
-		if len(input.RELEASE_DATE) < 4 || len(input.RELEASE_DATE) > 8 {
+		if len(releaseDate) < 4 || len(releaseDate) > 8 {
 			fmt.Println("Invalid --release-date passed.")
 			os.Exit(1)
 		}
 
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
-		if r, err := strconv.Atoi(input.RELEASE_DATE); err == nil {
-			if r < 2018 {
-				fmt.Println("Invalid --release-date passed.")
-				os.Exit(1)
-			}
-		} else {
+		if year, err := strconv.Atoi(releaseDate); err != nil || year < 2018 {
 			fmt.Println("Invalid --release-date passed.")
 			os.Exit(1)
 		}
-	}
 
-	if len(input.RELEASE_DATE) != 0 && strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
-		fmt.Println("Bottlerocket don't support filter by release date")
-		os.Exit(1)
+		// Bottlerocket AMIs don't support release date filtering
+		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+			fmt.Println("Bottlerocket don't support filter by release date")
+			os.Exit(1)
+		}
 	}
 
 	cfg, err := config.LoadDefaultConfig(
