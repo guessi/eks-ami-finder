@@ -92,38 +92,32 @@ func amiSearch(input amiSearchInputSpec) {
 
 	var pattern string
 
-	switch ami_type := input.AMI_TYPE; ami_type {
-	case "AL2_ARM_64":
-		pattern = fmt.Sprintf("amazon-eks-arm64-node-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "AL2_x86_64":
-		pattern = fmt.Sprintf("amazon-eks-node-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "AL2_x86_64_GPU":
-		pattern = fmt.Sprintf("amazon-eks-gpu-node-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "AL2023_ARM_64_STANDARD":
-		pattern = fmt.Sprintf("amazon-eks-node-al2023-arm64-standard-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "AL2023_x86_64_STANDARD":
-		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-standard-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "AL2023_x86_64_NEURON":
-		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-neuron-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "AL2023_x86_64_NVIDIA":
-		pattern = fmt.Sprintf("amazon-eks-node-al2023-x86_64-nvidia-560-%s-v%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "BOTTLEROCKET_ARM_64":
-		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-aarch64-v*", input.KUBERNETES_VERSION)
-	case "BOTTLEROCKET_x86_64":
-		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-x86_64-v*", input.KUBERNETES_VERSION)
-	case "BOTTLEROCKET_ARM_64_NVIDIA":
-		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-nvidia-aarch64-v*", input.KUBERNETES_VERSION)
-	case "BOTTLEROCKET_x86_64_NVIDIA":
-		pattern = fmt.Sprintf("bottlerocket-aws-k8s-%s-nvidia-x86_64-v*", input.KUBERNETES_VERSION)
-	case "WINDOWS_CORE_2019_x86_64":
-		pattern = fmt.Sprintf("Windows_Server-2019-English-Core-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "WINDOWS_FULL_2019_x86_64":
-		pattern = fmt.Sprintf("Windows_Server-2019-English-Full-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "WINDOWS_CORE_2022_x86_64":
-		pattern = fmt.Sprintf("Windows_Server-2022-English-Core-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	case "WINDOWS_FULL_2022_x86_64":
-		pattern = fmt.Sprintf("Windows_Server-2022-English-Full-EKS_Optimized-%s-%s*", input.KUBERNETES_VERSION, input.RELEASE_DATE)
-	default:
+	// Map of AMI type patterns to avoid repetitive string formatting
+	amiPatterns := map[string]string{
+		"AL2_ARM_64":                 "amazon-eks-arm64-node-%s-v%s*",
+		"AL2_x86_64":                 "amazon-eks-node-%s-v%s*",
+		"AL2_x86_64_GPU":             "amazon-eks-gpu-node-%s-v%s*",
+		"AL2023_ARM_64_STANDARD":     "amazon-eks-node-al2023-arm64-standard-%s-v%s*",
+		"AL2023_x86_64_STANDARD":     "amazon-eks-node-al2023-x86_64-standard-%s-v%s*",
+		"AL2023_x86_64_NEURON":       "amazon-eks-node-al2023-x86_64-neuron-%s-v%s*",
+		"AL2023_x86_64_NVIDIA":       "amazon-eks-node-al2023-x86_64-nvidia-560-%s-v%s*",
+		"BOTTLEROCKET_ARM_64":        "bottlerocket-aws-k8s-%s-aarch64-v*",
+		"BOTTLEROCKET_x86_64":        "bottlerocket-aws-k8s-%s-x86_64-v*",
+		"BOTTLEROCKET_ARM_64_NVIDIA": "bottlerocket-aws-k8s-%s-nvidia-aarch64-v*",
+		"BOTTLEROCKET_x86_64_NVIDIA": "bottlerocket-aws-k8s-%s-nvidia-x86_64-v*",
+		"WINDOWS_CORE_2019_x86_64":   "Windows_Server-2019-English-Core-EKS_Optimized-%s-%s*",
+		"WINDOWS_FULL_2019_x86_64":   "Windows_Server-2019-English-Full-EKS_Optimized-%s-%s*",
+		"WINDOWS_CORE_2022_x86_64":   "Windows_Server-2022-English-Core-EKS_Optimized-%s-%s*",
+		"WINDOWS_FULL_2022_x86_64":   "Windows_Server-2022-English-Full-EKS_Optimized-%s-%s*",
+	}
+
+	if patternTemplate, ok := amiPatterns[input.AMI_TYPE]; ok {
+		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+			pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION)
+		} else {
+			pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
+		}
+	} else {
 		fmt.Println("Invalid AMI_TYPE input")
 	}
 
