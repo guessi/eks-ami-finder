@@ -47,30 +47,40 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 202
 +-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
 +-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
+| us-east-1 | ami-0674cf36919d4f8b1 | amazon-eks-node-1.31-v20241213 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.3, containerd: 1.7.*)    | 2026-12-14T00:11:25.000Z | x86_64       |
+| us-east-1 | ami-03869a2749cf4adc1 | amazon-eks-node-1.31-v20241205 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.3, containerd: 1.7.*)    | 2026-12-05T18:24:07.000Z | x86_64       |
+| us-east-1 | ami-03e3d5f1e9559ede2 | amazon-eks-node-1.31-v20241121 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.2, containerd: 1.7.*)    | 2026-11-22T17:16:50.000Z | x86_64       |
+| us-east-1 | ami-08e92a4bc5f1fbc57 | amazon-eks-node-1.31-v20241115 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.2, containerd: 1.7.*)    | 2026-11-16T22:01:18.000Z | x86_64       |
+| us-east-1 | ami-03c7095f7c9fd69d3 | amazon-eks-node-1.31-v20241109 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.*)    | 2026-11-10T03:48:36.000Z | x86_64       |
+| us-east-1 | ami-092bb69592b2bfeee | amazon-eks-node-1.31-v20241106 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.*)    | 2026-11-06T19:35:30.000Z | x86_64       |
+| us-east-1 | ami-0eddf4b3eca8324cc | amazon-eks-node-1.31-v20241024 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.*)    | 2026-10-24T07:08:07.000Z | x86_64       |
+| us-east-1 | ami-0f46300123ec7bca7 | amazon-eks-node-1.31-v20241016 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.*)    | 2026-10-19T06:18:44.000Z | x86_64       |
+| us-east-1 | ami-0219725ba4a272b24 | amazon-eks-node-1.31-v20241011 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.*)    | 2026-10-11T23:10:34.000Z | x86_64       |
+| us-east-1 | ami-06d9bcac32f727ddb | amazon-eks-node-1.31-v20240928 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-29T02:23:39.000Z | x86_64       |
 | us-east-1 | ami-03a66e914971f8646 | amazon-eks-node-1.31-v20240924 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-25T02:01:32.000Z | x86_64       |
 | us-east-1 | ami-00ec84c1189958713 | amazon-eks-node-1.31-v20240917 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-18T06:26:49.000Z | x86_64       |
 +-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 202409 # for all 1.31 AMIs released with specific month
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 202412 # for all 1.31 AMIs released with specific month
 
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-03a66e914971f8646 | amazon-eks-node-1.31-v20240924 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-25T02:01:32.000Z | x86_64       |
-| us-east-1 | ami-00ec84c1189958713 | amazon-eks-node-1.31-v20240917 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-18T06:26:49.000Z | x86_64       |
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
+| Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          | Architecture |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
+| us-east-1 | ami-0674cf36919d4f8b1 | amazon-eks-node-1.31-v20241213 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.3, containerd: 1.7.*) | 2026-12-14T00:11:25.000Z | x86_64       |
+| us-east-1 | ami-03869a2749cf4adc1 | amazon-eks-node-1.31-v20241205 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.3, containerd: 1.7.*) | 2026-12-05T18:24:07.000Z | x86_64       |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 20240924 # for all 1.31 AMIs released with specific date
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 20241213 # for all 1.31 AMIs released with specific date
 
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| Region    | AMI ID                | Name                           | Description                                                                            | DeprecationTime          | Architecture |
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-03a66e914971f8646 | amazon-eks-node-1.31-v20240924 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.0, containerd: 1.7.11-*) | 2026-09-25T02:01:32.000Z | x86_64       |
-+-----------+-----------------------+--------------------------------+----------------------------------------------------------------------------------------+--------------------------+--------------+
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
+| Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          | Architecture |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
+| us-east-1 | ami-0674cf36919d4f8b1 | amazon-eks-node-1.31-v20241213 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.31.3, containerd: 1.7.*) | 2026-12-14T00:11:25.000Z | x86_64       |
++-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
 </details>
