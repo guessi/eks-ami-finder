@@ -171,11 +171,11 @@ func amiSearch(input amiSearchInputSpec) {
 	for _, i := range images {
 		t.AppendRow(table.Row{
 			input.AWS_REGION,
-			*i.ImageId,
-			*i.Name,
-			*i.Description,
-			*i.CreationDate,
-			*i.DeprecationTime,
+			aws.ToString(i.ImageId),
+			aws.ToString(i.Name),
+			aws.ToString(i.Description),
+			aws.ToString(i.CreationDate),
+			aws.ToString(i.DeprecationTime),
 			i.Architecture,
 		})
 	}
