@@ -1,5 +1,11 @@
 <!-- markdownlint-disable -->
 
+# v1.0.18 / 2024-12-27
+
+* Biuld with golang 1.23
+* Minor code refactoring
+* Dependencies update
+
 # v1.0.17 / 2024-12-16
 
 * Dependencies update
