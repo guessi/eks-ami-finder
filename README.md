@@ -8,7 +8,7 @@
 
 retrieve Amazon EKS AMI with filters
 
-## Usage
+## 🚀 Quick start
 
 ```bash
 $ eks-ami-finder --help
@@ -85,21 +85,21 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.31 --release-date 202
 
 </details>
 
-## FAQ
+## :accessibility: FAQ
 
 Q: Where can I find he definition for the value of `--ami-type` flag?
 
 A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegroup.html#AmazonEKS-Type-Nodegroup-amiType) definition here.
 
-## Install
+## 👷 Install
 
-### Homebrew
+### For macOS users (Recommended)
 
 ```bash
 brew tap guessi/tap && brew update && brew install eks-ami-finder
 ```
 
-### For non-Homebrew users
+### Manually setup (Linux, Windows, macOS)
 
 <details><!-- markdownlint-disable-line -->
 <summary>Click to expand!</summary><!-- markdownlint-disable-line -->
@@ -128,6 +128,6 @@ Invoke-RestMethod -Uri $SRC -OutFile $DST
 
 </details>
 
-## License
+## ⚖️ License
 
 [Apache-2.0](LICENSE)
