@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.0.19 / 2025-01-24
+
+* Set default version to 1.32
+
 # v1.0.18 / 2024-12-27
 
 * Biuld with golang 1.23
