@@ -25,8 +25,6 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.32 --release-date 202
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
-</details>
-
 ## :accessibility: FAQ
 
 Q: Where can I find he definition for the value of `--ami-type` flag?
