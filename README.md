@@ -8,6 +8,10 @@
 
 retrieve Amazon EKS AMI with filters
 
+## 🔢 Prerequisites
+
+* An IAM Role/User with [ec2:DescribeImages](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeImages.html) permission.
+
 ## 🚀 Quick start
 
 ```bash
@@ -33,7 +37,7 @@ A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegro
 
 ## 👷 Install
 
-### For macOS users (Recommended)
+### For macOS/Linux users (Recommended)
 
 ```bash
 brew tap guessi/tap && brew update && brew install eks-ami-finder
@@ -44,21 +48,21 @@ brew tap guessi/tap && brew update && brew install eks-ami-finder
 <details><!-- markdownlint-disable-line -->
 <summary>Click to expand!</summary><!-- markdownlint-disable-line -->
 
-### For Linux users
+#### For Linux users
 
 ```bash
 curl -fsSL https://github.com/guessi/eks-ami-finder/releases/latest/download/eks-ami-finder-Linux-$(uname -m).tar.gz -o - | tar zxvf -
 mv -vf ./eks-ami-finder /usr/local/bin/eks-ami-finder
 ```
 
-### For macOS users
+#### For macOS users
 
 ```bash
 curl -fsSL https://github.com/guessi/eks-ami-finder/releases/latest/download/eks-ami-finder-Darwin-$(uname -m).tar.gz -o - | tar zxvf -
 mv -vf ./eks-ami-finder /usr/local/bin/eks-ami-finder
 ```
 
-### For Windows users
+#### For Windows users
 
 ```powershell
 $SRC = 'https://github.com/guessi/eks-ami-finder/releases/latest/download/eks-ami-finder-Windows-x86_64.tar.gz'
