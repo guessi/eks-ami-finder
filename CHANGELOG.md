@@ -3,7 +3,7 @@
 # v1.0.20 / 2025-04-04
 
 * Extend support for `BOTTLEROCKET_ARM_64_FIPS` and `BOTTLEROCKET_x86_64_FIPS`
-* Biuld with golang 1.24
+* Build with golang 1.24
 * Dependencies update
 
 # v1.0.19 / 2025-01-24
