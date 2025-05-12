@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/guessi/eks-ami-finder/pkg/constants"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
-func amiSearchInput(c *cli.Context) amiSearchInputSpec {
+func amiSearchInput(c *cli.Command) amiSearchInputSpec {
 	maxResults, _ := strconv.Atoi(c.String("max-results"))
 
 	return amiSearchInputSpec{
@@ -23,7 +23,7 @@ func amiSearchInput(c *cli.Context) amiSearchInputSpec {
 	}
 }
 
-func Wrapper(c *cli.Context) {
+func Wrapper(c *cli.Command) {
 	r := amiSearchInput(c)
 
 	// if region input but having no ownerId assigned, assume it is looking for EKS official image build
