@@ -1,5 +1,12 @@
 <!-- markdownlint-disable -->
 
+# v1.0.21 / 2025-05-22
+
+* Add support for AL2023_ARM_64_NVIDIA
+* Fix incorrect ami filter for AL2023_x86_64_NVIDIA
+* Migrate to github.com/urfave/cli/v3
+* Bump dependencies
+
 # v1.0.20 / 2025-04-04
 
 * Extend support for `BOTTLEROCKET_ARM_64_FIPS` and `BOTTLEROCKET_x86_64_FIPS`
