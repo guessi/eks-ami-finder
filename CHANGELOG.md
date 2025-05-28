@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.0.22 / 2025-05-28
+
+* Update region support for `ap-southeast-7` and `me-central-1`
+
 # v1.0.21 / 2025-05-22
 
 * Add support for AL2023_ARM_64_NVIDIA
