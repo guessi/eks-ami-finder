@@ -7,7 +7,7 @@ toolchain go1.24.3
 require (
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/aws/aws-sdk-go-v2/config v1.29.14
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.221.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.223.0
 	github.com/jedib0t/go-pretty/v6 v6.6.7
 	github.com/urfave/cli/v3 v3.3.3
 )
