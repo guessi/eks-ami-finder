@@ -33,6 +33,10 @@ $ eks-ami-finder --region us-east-1 --kubernetes-version 1.32 --release-date 202
 
 ## :accessibility: FAQ
 
+Q: How does `eks-ami-finder` lookup the AMI IDs? what's the magic behind the scene?
+
+A: `eks-ami-finder` will first find out the Owner IDs of the AMI [HERE](hack/ami-owner-info-check.sh), then filter out AMI IDs that released by these Owner IDs [HERE](cmd/search.go) with patterns, just that simple!
+
 Q: Where can I find he definition for the value of `--ami-type` flag?
 
 A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegroup.html#AmazonEKS-Type-Nodegroup-amiType) definition here.
