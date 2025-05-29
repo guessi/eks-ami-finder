@@ -19,14 +19,15 @@ $ eks-ami-finder --help
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.32 --release-date 202501 # for all 1.32 AMIs released with specific month (prefix match)
+$ eks-ami-finder --region us-east-1 --kubernetes-version 1.32 --release-date 202505 # for all 1.32 AMIs released with specific month (prefix match)
 
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                           | Description                                                                         | DeprecationTime          | Architecture |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-093fee483ff615866 | amazon-eks-node-1.32-v20250123 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.0, containerd: 1.7.*) | 2027-01-23T21:28:59.000Z | x86_64       |
-| us-east-1 | ami-0c8b3670978968623 | amazon-eks-node-1.32-v20250116 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.0, containerd: 1.7.*) | 2027-01-16T22:46:55.000Z | x86_64       |
-| us-east-1 | ami-0226f5d1e7c6fc56e | amazon-eks-node-1.32-v20250103 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.0, containerd: 1.7.*) | 2027-01-04T00:22:02.000Z | x86_64       |
+| us-east-1 | ami-0f2e4735b924be9d0 | amazon-eks-node-1.32-v20250519 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.3, containerd: 1.7.*) | 2027-05-20T17:09:13.000Z | x86_64       |
+| us-east-1 | ami-0bda772ad7684f8d5 | amazon-eks-node-1.32-v20250514 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.3, containerd: 1.7.*) | 2027-05-14T04:13:57.000Z | x86_64       |
+| us-east-1 | ami-0f0e6b8d1eb5bf2cf | amazon-eks-node-1.32-v20250505 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.3, containerd: 1.7.*) | 2027-05-06T18:29:33.000Z | x86_64       |
+| us-east-1 | ami-08075f9ccf102cac9 | amazon-eks-node-1.32-v20250501 | EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.32.3, containerd: 1.7.*) | 2027-05-01T05:32:25.000Z | x86_64       |
 +-----------+-----------------------+--------------------------------+-------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
