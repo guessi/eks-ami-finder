@@ -49,28 +49,90 @@ func amiSearch(input amiSearchInputSpec) {
 		os.Exit(1)
 	}
 
-	if !slices.Contains(constants.ValidAmiTypes, input.AMI_TYPE) {
-		fmt.Printf("Invalid AMI_TYPE input (Valid input: %s)\n", strings.Join(constants.ValidAmiTypes, ", "))
+	var majorK8sVersion, minorK8sVersion int
+	if i, err := strconv.Atoi(strings.Split(input.KUBERNETES_VERSION, ".")[0]); err == nil {
+		majorK8sVersion = int(i)
+	}
+	if i, err := strconv.Atoi(strings.Split(input.KUBERNETES_VERSION, ".")[1]); err == nil {
+		minorK8sVersion = int(i)
+	}
+
+	if majorK8sVersion != 1 || minorK8sVersion < 10 {
+		// the first Amazon EKS version was 1.10
+		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
+		fmt.Printf("The very first Amazon EKS version was 1.10, so there would have no Amazon EKS %s.\n\n", input.KUBERNETES_VERSION)
 		os.Exit(1)
+	}
+
+	if !slices.Contains(constants.ValidAmiTypes, input.AMI_TYPE) {
+		fmt.Printf("Invalid AMI_TYPE input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes, ", "))
+		os.Exit(1)
+	} else {
+		// AL2 AMI will no longer supported for Amazon EKS 1.33 or newer
+		// - https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html
+		if minorK8sVersion >= 33 && strings.Split(input.AMI_TYPE, "_")[0] == "AL2" {
+			fmt.Printf("There would have no AL2-based Optimized AMI support for Amazon EKS 1.33 or newer.\n\n")
+			fmt.Printf("Check the following link for more info:\n")
+			fmt.Printf("- https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html\n\n")
+			os.Exit(1)
+		}
+
+		// AL2023 AMI support starting from Amazon EKS 1.23 or newer
+		// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-amis-now-available/
+		// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-accelerated-amis-now-available/
+		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "AL2023" {
+			fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+			os.Exit(1)
+		}
+
+		// Bottlerocket AMI initially support Amazon EKS 1.15 or newer
+		// - https://aws.amazon.com/blogs/containers/amazon-eks-adds-native-support-for-bottlerocket-in-managed-node-groups/
+		// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.0.0
+		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+		if minorK8sVersion < 15 && strings.Split(input.AMI_TYPE, "_")[0] == "BOTTLEROCKET" {
+			fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+			os.Exit(1)
+		}
+
+		// Windows Server AMI initially support Amazon EKS 1.14 or newer
+		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+		// - https://github.com/aws/containers-roadmap/issues/69#issuecomment-539641916
+		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+		if minorK8sVersion < 14 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
+			fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+			os.Exit(1)
+		}
+
+		// Windows Server 2019/2022 only support Amazon EKS 1.23 or newer
+		// - https://aws.amazon.com/blogs/containers/deploying-amazon-eks-windows-managed-node-groups/
+		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
+			if strings.Split(input.AMI_TYPE, "_")[2] == "2019" || strings.Split(input.AMI_TYPE, "_")[2] == "2022" {
+				fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				os.Exit(1)
+			}
+		}
+
 	}
 
 	if releaseDate := input.RELEASE_DATE; len(releaseDate) != 0 {
 		// releaseDate is expected to have at least Year included.
 		if len(releaseDate) < 4 || len(releaseDate) > 8 {
-			fmt.Println("Invalid --release-date passed.")
+			fmt.Printf("Invalid --release-date passed.\n\n")
 			os.Exit(1)
 		}
 
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
 		if year, err := strconv.Atoi(releaseDate); err != nil || year < 2018 {
-			fmt.Println("Invalid --release-date passed.")
+			fmt.Printf("Invalid --release-date passed.\n\n")
 			os.Exit(1)
 		}
 
 		// Bottlerocket AMIs don't support release date filtering
 		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
-			fmt.Println("Bottlerocket don't support filter by release date")
+			fmt.Printf("Bottlerocket don't support filter by release date.\n\n")
 			os.Exit(1)
 		}
 	}
@@ -80,7 +142,7 @@ func amiSearch(input amiSearchInputSpec) {
 		config.WithRegion(input.AWS_REGION),
 	)
 	if err != nil {
-		fmt.Printf("unable to load SDK config, %v", err)
+		fmt.Printf("unable to load SDK config, %v\n\n", err)
 		os.Exit(1)
 	}
 
@@ -119,7 +181,7 @@ func amiSearch(input amiSearchInputSpec) {
 			pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
 		}
 	} else {
-		fmt.Println("Invalid AMI_TYPE input")
+		fmt.Printf("Invalid AMI_TYPE input.\n\n")
 	}
 
 	filters := []types.Filter{
@@ -153,7 +215,7 @@ func amiSearch(input amiSearchInputSpec) {
 	}
 
 	if len(images) == 0 {
-		fmt.Println("No matching AMI found.")
+		fmt.Printf("No matching AMI found.\n\n")
 		os.Exit(0)
 	}
 
