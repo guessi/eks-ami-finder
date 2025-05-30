@@ -19,7 +19,7 @@ $ eks-ami-finder --help
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.33 --release-date 202505 # for all 1.33 AMIs released with specific month (prefix match)
+$ eks-ami-finder --release-date 202505 # for all 1.33 AMIs released with specific month (prefix match)
 
 +-----------+-----------------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                                                  | Description                                                                                | DeprecationTime          | Architecture |
