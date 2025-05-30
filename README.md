@@ -42,8 +42,16 @@ A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegro
 
 ### For macOS/Linux users (Recommended)
 
+Brand new install
+
 ```bash
 brew tap guessi/tap && brew update && brew install eks-ami-finder
+```
+
+To upgrade version
+
+```bash
+brew update && brew upgrade eks-ami-finder
 ```
 
 ### Manually setup (Linux, Windows, macOS)
