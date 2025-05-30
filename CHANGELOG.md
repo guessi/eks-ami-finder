@@ -1,5 +1,12 @@
 <!-- markdownlint-disable -->
 
+# v1.1.0 / 2025-05-30
+
+* Set default version to 1.33
+* Set default AMI_TYPE as `AL2023_x86_64_STANDARD`
+* Allow user to search deprecated Windows Server 2016 based AMIs
+* Make error messages understandable to fools
+
 # v1.0.22 / 2025-05-28
 
 * Update region support for `ap-southeast-7` and `me-central-1`
