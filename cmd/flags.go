@@ -20,7 +20,7 @@ var Flags = []cli.Flag{
 	&cli.StringFlag{
 		Name:    "ami-type",
 		Aliases: []string{"t"},
-		Value:   "AL2_x86_64",
+		Value:   "AL2023_x86_64_STANDARD",
 		Usage:   "AMI Type for the AMI",
 	},
 	&cli.StringFlag{
