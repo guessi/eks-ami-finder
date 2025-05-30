@@ -15,11 +15,11 @@ retrieve Amazon EKS AMI with filters
 ## 🚀 Quick start
 
 ```bash
-$ eks-ami-finder --help
+eks-ami-finder --help
 ```
 
 ```bash
-$ eks-ami-finder --region us-east-1 --kubernetes-version 1.33 --release-date 202505 # for all 1.33 AMIs released with specific month (prefix match)
+eks-ami-finder --release-date 202505 # for all 1.33 AMIs released with specific month (prefix match)
 
 +-----------+-----------------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                                                  | Description                                                                                | DeprecationTime          | Architecture |
@@ -42,8 +42,16 @@ A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegro
 
 ### For macOS/Linux users (Recommended)
 
+Brand new install
+
 ```bash
 brew tap guessi/tap && brew update && brew install eks-ami-finder
+```
+
+To upgrade version
+
+```bash
+brew update && brew upgrade eks-ami-finder
 ```
 
 ### Manually setup (Linux, Windows, macOS)
