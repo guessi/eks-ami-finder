@@ -104,8 +104,10 @@ func amiSearch(input amiSearchInputSpec) {
 		"BOTTLEROCKET_x86_64_FIPS":   "bottlerocket-aws-k8s-%s-fips-x86_64-v*",
 		"BOTTLEROCKET_x86_64_NVIDIA": "bottlerocket-aws-k8s-%s-nvidia-x86_64-v*",
 		"BOTTLEROCKET_x86_64":        "bottlerocket-aws-k8s-%s-x86_64-v*",
+		"WINDOWS_CORE_2016_x86_64":   "Windows_Server-2016-English-Core-EKS_Optimized-%s-%s*",
 		"WINDOWS_CORE_2019_x86_64":   "Windows_Server-2019-English-Core-EKS_Optimized-%s-%s*",
 		"WINDOWS_CORE_2022_x86_64":   "Windows_Server-2022-English-Core-EKS_Optimized-%s-%s*",
+		"WINDOWS_FULL_2016_x86_64":   "Windows_Server-2016-English-Full-EKS_Optimized-%s-%s*",
 		"WINDOWS_FULL_2019_x86_64":   "Windows_Server-2019-English-Full-EKS_Optimized-%s-%s*",
 		"WINDOWS_FULL_2022_x86_64":   "Windows_Server-2022-English-Full-EKS_Optimized-%s-%s*",
 	}
