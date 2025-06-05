@@ -49,6 +49,7 @@ var (
 	AwsAccountMappingsAL = map[string]string{
 		"af-south-1":     "877085696533",
 		"ap-east-1":      "800184023465",
+		"ap-east-2":      "533267051163",
 		"ap-south-2":     "900889452093",
 		"ap-southeast-3": "296578399912",
 		"ap-southeast-4": "491585149902",
@@ -74,6 +75,7 @@ var (
 	AwsAccountMappingsBottlerocket = map[string]string{
 		"af-south-1":     "291523557710",
 		"ap-east-1":      "040063162771",
+		"ap-east-2":      "992382384230",
 		"ap-northeast-1": "593245189075",
 		"ap-northeast-2": "630172235254",
 		"ap-northeast-3": "429266927828",
@@ -114,6 +116,7 @@ var (
 	AwsAccountMappingsWindows = map[string]string{
 		"af-south-1":     "597400817333",
 		"ap-east-1":      "907716943349",
+		"ap-east-2":      "891376989287",
 		"ap-northeast-1": "517802777641",
 		"ap-northeast-2": "918716859121",
 		"ap-northeast-3": "834741791908",
