@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.2.0 / 2025-06-06
+
+* Update region support for `ap-east-2`
+
 # v1.1.0 / 2025-05-30
 
 * Set default version to 1.33
