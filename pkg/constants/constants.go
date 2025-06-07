@@ -62,6 +62,7 @@ var (
 		"eu-south-1":     "590381155156",
 		"eu-south-2":     "455263428931",
 		"il-central-1":   "066635153087",
+		"me-central-1":   "759879836304",
 		"mx-central-1":   "730335286997",
 		"me-south-1":     "558608220178",
 		"us-gov-east-1":  "151742754352",
@@ -71,7 +72,6 @@ var (
 		"*":              "602401143452",
 	}
 
-	// Opt-in regions excluded
 	AwsAccountMappingsBottlerocket = map[string]string{
 		"af-south-1":     "291523557710",
 		"ap-east-1":      "040063162771",
@@ -112,7 +112,6 @@ var (
 		"us-gov-west-1":  "372333677703",
 	}
 
-	// Opt-in regions excluded
 	AwsAccountMappingsWindows = map[string]string{
 		"af-south-1":     "597400817333",
 		"ap-east-1":      "907716943349",
