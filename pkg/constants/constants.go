@@ -2,7 +2,7 @@ package constants
 
 const (
 	NAME  string = "eks-ami-finder"
-	USAGE string = "retrieve Amazon EKS AMI with filters"
+	USAGE string = "Helper tool to find Amazon EKS optimized AMI IDs"
 )
 
 var (

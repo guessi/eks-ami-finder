@@ -6,7 +6,7 @@
 [![GitHub release](https://img.shields.io/github/release/guessi/eks-ami-finder.svg)](https://github.com/guessi/eks-ami-finder/releases/latest)
 [![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/guessi/eks-ami-finder)](https://github.com/guessi/eks-ami-finder/blob/main/go.mod)
 
-retrieve Amazon EKS AMI with filters
+Helper tool to find Amazon EKS optimized AMI IDs
 
 ## 🔢 Prerequisites
 
