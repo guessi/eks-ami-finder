@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.2.1 / 2025-06-08
+
+* Fix missing `me-central-1` setup for AL2/AL2023-based AMI
+
 # v1.2.0 / 2025-06-06
 
 * Update region support for `ap-east-2`
