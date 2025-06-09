@@ -35,10 +35,8 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 		}
 	}
 
-	returnSize = maxResults
-	if len(images) < maxResults {
-		returnSize = len(images)
-	}
+	returnSize = min(maxResults, len(images))
+
 	return images[:returnSize], nil
 }
 
