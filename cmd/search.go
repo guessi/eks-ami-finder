@@ -4,10 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
@@ -18,6 +20,19 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
 )
+
+func isUnsupportedRegion(ctx context.Context, region string) bool {
+	if region == "" {
+		return true
+	}
+
+	hostname := fmt.Sprintf("ec2.%s.amazonaws.com", region)
+	lookupCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+
+	_, err := (&net.Resolver{}).LookupHost(lookupCtx, hostname)
+	return err != nil
+}
 
 func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input *ec2.DescribeImagesInput, maxResults int) ([]types.Image, error) {
 	var images []types.Image
@@ -51,6 +66,11 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 	// do nothing if maxResults is invalid input
 	if input.MAX_RESULTS <= 0 {
 		fmt.Printf("Can not pass --max-results with a value lower or equal to 0.\n\n")
+		os.Exit(1)
+	}
+
+	if isUnsupportedRegion(ctx, input.AWS_REGION) {
+		fmt.Printf("Unable to resolve EC2 endpoint for the given region. Please check your region input.\n\n")
 		os.Exit(1)
 	}
 
