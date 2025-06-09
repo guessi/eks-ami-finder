@@ -1,5 +1,12 @@
 <!-- markdownlint-disable -->
 
+# v1.2.2 / 2025-06-10
+
+* Fix incorrect AMI returns for `BOTTLEROCKET_ARM_64_FIPS`
+* Allow passing `--timeout` to avoid command running too long
+* Early exit if EC2 endpoint not reachable for target region
+* Fix multiple logic handling issues
+
 # v1.2.1 / 2025-06-08
 
 * Fix missing `me-central-1` setup for AL2/AL2023-based AMI
