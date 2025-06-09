@@ -25,6 +25,13 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 
 	paginator := ec2.NewDescribeImagesPaginator(svc, input)
 	for paginator.HasMorePages() {
+		// Check for context cancellation
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		default:
+		}
+
 		out, err := paginator.NextPage(ctx)
 		if err != nil {
 			return nil, err
@@ -40,7 +47,7 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 	return images[:returnSize], nil
 }
 
-func amiSearch(input amiSearchInputSpec) {
+func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 	// do nothing if maxResults is invalid input
 	if input.MAX_RESULTS <= 0 {
 		fmt.Println("Can not pass --max-results with a value lower or equal to 0.")
@@ -136,7 +143,7 @@ func amiSearch(input amiSearchInputSpec) {
 	}
 
 	cfg, err := config.LoadDefaultConfig(
-		context.TODO(),
+		ctx,
 		config.WithRegion(input.AWS_REGION),
 	)
 	if err != nil {
@@ -203,7 +210,7 @@ func amiSearch(input amiSearchInputSpec) {
 		IncludeDeprecated: aws.Bool(input.INCLUDE_DEPRECATED),
 	}
 
-	images, err := findAmiMatches(context.TODO(), svc, &describeImagesInput, input.MAX_RESULTS)
+	images, err := findAmiMatches(ctx, svc, &describeImagesInput, input.MAX_RESULTS)
 	if err != nil {
 		var re *awshttp.ResponseError
 		if errors.As(err, &re) {

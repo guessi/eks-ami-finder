@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"time"
+
 	"github.com/urfave/cli/v3"
 )
 
@@ -34,6 +36,11 @@ var Flags = []cli.Flag{
 		Aliases: []string{"d"},
 		Value:   "",
 		Usage:   "Release date with [yyyy], [yyyymm] or [yyyymmdd] format",
+	},
+	&cli.DurationFlag{
+		Name:  "timeout",
+		Value: 30 * time.Second,
+		Usage: "Request timeout duration (default: 30s)",
 	},
 	&cli.BoolFlag{
 		Name:  "include-deprecated",

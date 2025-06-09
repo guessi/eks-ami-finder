@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"strconv"
 	"strings"
 
@@ -23,7 +24,10 @@ func amiSearchInput(c *cli.Command) amiSearchInputSpec {
 	}
 }
 
-func Wrapper(c *cli.Command) {
+func Wrapper(ctx context.Context, c *cli.Command) {
+	ctx, cancel := context.WithTimeout(ctx, c.Duration("timeout"))
+	defer cancel()
+
 	r := amiSearchInput(c)
 
 	// if region input but having no ownerId assigned, assume it is looking for EKS official image build
@@ -45,5 +49,5 @@ func Wrapper(c *cli.Command) {
 		}
 	}
 
-	amiSearch(r)
+	amiSearch(ctx, r)
 }
