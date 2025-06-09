@@ -165,7 +165,7 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		"AL2023_x86_64_NEURON":       "amazon-eks-node-al2023-x86_64-neuron-%s-v%s*",
 		"AL2023_x86_64_NVIDIA":       "amazon-eks-node-al2023-x86_64-nvidia-%s-v%s*",
 		"AL2023_x86_64_STANDARD":     "amazon-eks-node-al2023-x86_64-standard-%s-v%s*",
-		"BOTTLEROCKET_ARM_64_FIPS":   "bottlerocket-aws-k8s-%s-fips-x86_64-v*",
+		"BOTTLEROCKET_ARM_64_FIPS":   "bottlerocket-aws-k8s-%s-fips-aarch64-v*",
 		"BOTTLEROCKET_ARM_64_NVIDIA": "bottlerocket-aws-k8s-%s-nvidia-aarch64-v*",
 		"BOTTLEROCKET_ARM_64":        "bottlerocket-aws-k8s-%s-aarch64-v*",
 		"BOTTLEROCKET_x86_64_FIPS":   "bottlerocket-aws-k8s-%s-fips-x86_64-v*",
