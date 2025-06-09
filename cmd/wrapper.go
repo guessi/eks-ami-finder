@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
@@ -10,7 +12,11 @@ import (
 )
 
 func amiSearchInput(c *cli.Command) amiSearchInputSpec {
-	maxResults, _ := strconv.Atoi(c.String("max-results"))
+	maxResults, err := strconv.Atoi(c.String("max-results"))
+	if err != nil {
+		fmt.Printf("Invalid --max-results value: %s. Must be a valid integer.\n\n", c.String("max-results"))
+		os.Exit(1)
+	}
 
 	return amiSearchInputSpec{
 		AWS_REGION:         c.String("region"),
@@ -30,8 +36,8 @@ func Wrapper(ctx context.Context, c *cli.Command) {
 
 	r := amiSearchInput(c)
 
-	// if region input but having no ownerId assigned, assume it is looking for EKS official image build
-	if len(r.AWS_REGION) > 0 && len(r.AMI_OWNER_ID) != 12 {
+	// If region is specified but owner ID is missing or invalid, assume it is looking for EKS official image build
+	if len(r.AWS_REGION) > 0 && (len(r.AMI_OWNER_ID) == 0 || len(r.AMI_OWNER_ID) != 12) {
 		var mappings map[string]string
 		switch {
 		case strings.HasPrefix(r.AMI_TYPE, "AL2_"), strings.HasPrefix(r.AMI_TYPE, "AL2023_"):

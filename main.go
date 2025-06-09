@@ -11,9 +11,10 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
+var versionRegex = regexp.MustCompile(`v[0-9]\.[0-9]+\.[0-9]+`)
+
 func showVersion() {
-	r, _ := regexp.Compile(`v[0-9]\.[0-9]+\.[0-9]+`)
-	versionInfo := r.FindString(constants.GitVersion)
+	versionInfo := versionRegex.FindString(constants.GitVersion)
 	fmt.Println("eks-ami-finder", versionInfo)
 	fmt.Println(" Git Commit:", constants.GitVersion)
 	fmt.Println(" Build with:", constants.GoVersion)

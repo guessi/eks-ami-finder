@@ -50,16 +50,22 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 	// do nothing if maxResults is invalid input
 	if input.MAX_RESULTS <= 0 {
-		fmt.Println("Can not pass --max-results with a value lower or equal to 0.")
+		fmt.Printf("Can not pass --max-results with a value lower or equal to 0.\n\n")
 		os.Exit(1)
 	}
 
 	var majorK8sVersion, minorK8sVersion int
-	if i, err := strconv.Atoi(strings.Split(input.KUBERNETES_VERSION, ".")[0]); err == nil {
-		majorK8sVersion = int(i)
-	}
-	if i, err := strconv.Atoi(strings.Split(input.KUBERNETES_VERSION, ".")[1]); err == nil {
-		minorK8sVersion = int(i)
+	versionParts := strings.Split(input.KUBERNETES_VERSION, ".")
+	if len(versionParts) >= 2 {
+		if i, err := strconv.Atoi(versionParts[0]); err == nil {
+			majorK8sVersion = int(i)
+		}
+		if i, err := strconv.Atoi(versionParts[1]); err == nil {
+			minorK8sVersion = int(i)
+		}
+	} else {
+		fmt.Printf("Invalid Kubernetes version format. Expected format: X.Y (e.g., 1.33)\n\n")
+		os.Exit(1)
 	}
 
 	if majorK8sVersion != 1 || minorK8sVersion < 10 {
@@ -113,7 +119,8 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		// - https://aws.amazon.com/blogs/containers/deploying-amazon-eks-windows-managed-node-groups/
 		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
-			if strings.Split(input.AMI_TYPE, "_")[2] == "2019" || strings.Split(input.AMI_TYPE, "_")[2] == "2022" {
+			amiTypeParts := strings.Split(input.AMI_TYPE, "_")
+			if len(amiTypeParts) >= 3 && (amiTypeParts[2] == "2019" || amiTypeParts[2] == "2022") {
 				fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
 				os.Exit(1)
 			}
@@ -130,14 +137,14 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
-		if year, err := strconv.Atoi(releaseDate); err != nil || year < 2018 {
+		if year, err := strconv.Atoi(releaseDate[:4]); err != nil || year < 2018 {
 			fmt.Printf("Invalid --release-date passed.\n\n")
 			os.Exit(1)
 		}
 
 		// Bottlerocket AMIs don't support release date filtering
 		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
-			fmt.Printf("Bottlerocket don't support filter by release date.\n\n")
+			fmt.Printf("Bottlerocket doesn't support filter by release date.\n\n")
 			os.Exit(1)
 		}
 	}
@@ -187,6 +194,7 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		}
 	} else {
 		fmt.Printf("Invalid AMI_TYPE input.\n\n")
+		os.Exit(1)
 	}
 
 	filters := []types.Filter{
@@ -212,11 +220,22 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 
 	images, err := findAmiMatches(ctx, svc, &describeImagesInput, input.MAX_RESULTS)
 	if err != nil {
-		var re *awshttp.ResponseError
-		if errors.As(err, &re) {
-			fmt.Printf("requestID: %s, error: %v", re.ServiceRequestID(), re.Unwrap())
+		// Check for context cancellation first
+		if ctx.Err() != nil {
+			fmt.Printf("Request cancelled or timed out: %v\n\n", ctx.Err())
 			os.Exit(1)
 		}
+
+		// Check for AWS-specific errors
+		var re *awshttp.ResponseError
+		if errors.As(err, &re) {
+			fmt.Printf("requestID: %s, error: %v\n\n", re.ServiceRequestID(), re.Unwrap())
+			os.Exit(1)
+		}
+
+		// Handle other errors
+		fmt.Printf("Error retrieving AMI information: %v\n\n", err)
+		os.Exit(1)
 	}
 
 	if len(images) == 0 {
