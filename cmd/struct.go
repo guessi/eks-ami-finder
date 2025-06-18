@@ -7,6 +7,7 @@ type amiSearchInputSpec struct {
 	KUBERNETES_VERSION string
 	RELEASE_DATE       string
 	MAX_RESULTS        int
+	AUTO_MODE          bool
 	INCLUDE_DEPRECATED bool
 	DEBUG_MODE         bool
 }

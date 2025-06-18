@@ -62,7 +62,7 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 	return images[:returnSize], nil
 }
 
-func amiSearch(ctx context.Context, input amiSearchInputSpec) {
+func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 	// do nothing if maxResults is invalid input
 	if input.MAX_RESULTS <= 0 {
 		fmt.Printf("Can not pass --max-results with a value lower or equal to 0.\n\n")
@@ -95,10 +95,17 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		os.Exit(1)
 	}
 
-	if !slices.Contains(constants.ValidAmiTypes, input.AMI_TYPE) {
-		fmt.Printf("Invalid AMI_TYPE input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes, ", "))
+	if input.AUTO_MODE && !slices.Contains(constants.ValidAmiTypes["AUTO_MODE"], input.AMI_TYPE) {
+		fmt.Printf("Invalid --ami-type input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes["AUTO_MODE"], ", "))
 		os.Exit(1)
-	} else {
+	}
+
+	if !input.AUTO_MODE && !slices.Contains(constants.ValidAmiTypes["DEFAULT"], input.AMI_TYPE) {
+		fmt.Printf("Invalid --ami-type input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes["DEFAULT"], ", "))
+		os.Exit(1)
+	}
+
+	if !input.AUTO_MODE {
 		// AL2 AMI will no longer supported for Amazon EKS 1.33 or newer
 		// - https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html
 		if minorK8sVersion >= 33 && strings.Split(input.AMI_TYPE, "_")[0] == "AL2" {
@@ -145,7 +152,6 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 				os.Exit(1)
 			}
 		}
-
 	}
 
 	if releaseDate := input.RELEASE_DATE; len(releaseDate) != 0 {
@@ -163,11 +169,16 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		}
 
 		// Bottlerocket AMIs don't support release date filtering
-		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+		if !input.AUTO_MODE && strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
 			fmt.Printf("Bottlerocket doesn't support filter by release date.\n\n")
 			os.Exit(1)
 		}
 	}
+}
+
+func amiSearch(ctx context.Context, input amiSearchInputSpec) {
+	// basic validations
+	simpleInputValidation(ctx, input)
 
 	cfg, err := config.LoadDefaultConfig(
 		ctx,
@@ -181,6 +192,15 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 	svc := ec2.NewFromConfig(cfg)
 
 	var pattern string
+
+	// Map of AMI type patterns to avoid repetitive string formatting (Auto Mode)
+	autoModeAmiPatterns := map[string]string{
+		"AUTO_MODE_NEURON_x86_64":   "eks-auto-neuron-%s-x86_64-%s*",
+		"AUTO_MODE_NVIDIA_ARM_64":   "eks-auto-nvidia-%s-aarch64-%s*",
+		"AUTO_MODE_NVIDIA_x86_64":   "eks-auto-nvidia-%s-x86_64-%s*",
+		"AUTO_MODE_STANDARD_ARM_64": "eks-auto-standard-%s-aarch64-%s*",
+		"AUTO_MODE_STANDARD_x86_64": "eks-auto-standard-%s-x86_64-%s*",
+	}
 
 	// Map of AMI type patterns to avoid repetitive string formatting
 	amiPatterns := map[string]string{
@@ -206,15 +226,31 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		"WINDOWS_FULL_2022_x86_64":   "Windows_Server-2022-English-Full-EKS_Optimized-%s-%s*",
 	}
 
-	if patternTemplate, ok := amiPatterns[input.AMI_TYPE]; ok {
-		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
-			pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION)
+	if input.AUTO_MODE {
+		if v, ok := constants.AwsAccountMappingsAutoMode[input.AWS_REGION]; ok {
+			input.AMI_OWNER_ID = v
 		} else {
+			fmt.Printf("Auto Mode might not supported in %s region.\n\n", input.AWS_REGION)
+			os.Exit(1)
+		}
+
+		if patternTemplate, ok := autoModeAmiPatterns[input.AMI_TYPE]; ok {
 			pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
+		} else {
+			fmt.Printf("Invalid --ami-type input.\n\n")
+			os.Exit(1)
 		}
 	} else {
-		fmt.Printf("Invalid AMI_TYPE input.\n\n")
-		os.Exit(1)
+		if patternTemplate, ok := amiPatterns[input.AMI_TYPE]; ok {
+			if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+				pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION)
+			} else {
+				pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
+			}
+		} else {
+			fmt.Printf("Invalid --ami-type input.\n\n")
+			os.Exit(1)
+		}
 	}
 
 	filters := []types.Filter{

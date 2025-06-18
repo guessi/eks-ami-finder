@@ -25,6 +25,7 @@ func amiSearchInput(c *cli.Command) amiSearchInputSpec {
 		KUBERNETES_VERSION: c.String("kubernetes-version"),
 		RELEASE_DATE:       c.String("release-date"),
 		MAX_RESULTS:        maxResults,
+		AUTO_MODE:          c.Bool("auto-mode"),
 		INCLUDE_DEPRECATED: c.Bool("include-deprecated"),
 		DEBUG_MODE:         c.Bool("debug"),
 	}
@@ -35,6 +36,15 @@ func Wrapper(ctx context.Context, c *cli.Command) {
 	defer cancel()
 
 	r := amiSearchInput(c)
+
+	// Set default AMI_TYPE based on AUTO_MODE
+	if r.AMI_TYPE == "" {
+		if r.AUTO_MODE {
+			r.AMI_TYPE = "AUTO_MODE_STANDARD_x86_64"
+		} else {
+			r.AMI_TYPE = "AL2023_x86_64_STANDARD"
+		}
+	}
 
 	// If region is specified but owner ID is missing or invalid, assume it is looking for EKS official image build
 	if len(r.AWS_REGION) > 0 && (len(r.AMI_OWNER_ID) == 0 || len(r.AMI_OWNER_ID) != 12) {

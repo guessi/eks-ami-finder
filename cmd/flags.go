@@ -20,10 +20,10 @@ var Flags = []cli.Flag{
 		Usage:   "Owner ID of the AMI",
 	},
 	&cli.StringFlag{
-		Name:    "ami-type",
-		Aliases: []string{"t"},
-		Value:   "AL2023_x86_64_STANDARD",
-		Usage:   "AMI Type for the AMI",
+		Name:        "ami-type",
+		Aliases:     []string{"t"},
+		DefaultText: "\"AL2023_x86_64_STANDARD\" or \"AUTO_MODE_STANDARD_x86_64\"",
+		Usage:       "AMI Type for the AMI",
 	},
 	&cli.StringFlag{
 		Name:    "kubernetes-version",
@@ -41,6 +41,10 @@ var Flags = []cli.Flag{
 		Name:  "timeout",
 		Value: 30 * time.Second,
 		Usage: "Request timeout duration (default: 30s)",
+	},
+	&cli.BoolFlag{
+		Name:  "auto-mode",
+		Value: false,
 	},
 	&cli.BoolFlag{
 		Name:  "include-deprecated",
