@@ -40,7 +40,7 @@ var Flags = []cli.Flag{
 	&cli.DurationFlag{
 		Name:  "timeout",
 		Value: 30 * time.Second,
-		Usage: "Request timeout duration (default: 30s)",
+		Usage: "Request timeout duration",
 	},
 	&cli.BoolFlag{
 		Name:  "auto-mode",
