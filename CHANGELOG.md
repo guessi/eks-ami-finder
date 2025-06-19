@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.3.0 / 2025-06-20
+
+* Support for Auto Mode AMI search
+
 # v1.2.2 / 2025-06-10
 
 * Fix incorrect AMI returns for `BOTTLEROCKET_ARM_64_FIPS`
