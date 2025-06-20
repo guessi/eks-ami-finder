@@ -15,16 +15,16 @@ Helper tool to find Amazon EKS optimized AMI IDs
 ## 🚀 Quick start
 
 ```bash
-eks-ami-finder --help
+eks-ami-finder help
 ```
 
 ```bash
-eks-ami-finder --release-date 202505 # for all 1.33 AMIs released with specific month (prefix match)
+eks-ami-finder --release-date 202506 # for all AMIs released with specific month (prefix match)
 
 +-----------+-----------------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                                                  | Description                                                                                | DeprecationTime          | Architecture |
 +-----------+-----------------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-014f71cc7221992de | amazon-eks-node-al2023-x86_64-standard-1.33-v20250519 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.33.0, containerd: 1.7.*) | 2027-05-20T17:09:14.000Z | x86_64       |
+| us-east-1 | ami-0cf8cd7cb46ff26a0 | amazon-eks-node-al2023-x86_64-standard-1.33-v20250610 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.33.0, containerd: 1.7.*) | 2027-06-10T07:36:15.000Z | x86_64       |
 +-----------+-----------------------+-------------------------------------------------------+--------------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
