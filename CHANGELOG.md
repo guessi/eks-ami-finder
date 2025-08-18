@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.3.1 / 2025-08-18
+
+* Built with golang 1.24.6
+* Bump dependencies
+
 # v1.3.0 / 2025-06-20
 
 * Support for Auto Mode AMI search
