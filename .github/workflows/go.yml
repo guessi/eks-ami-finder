@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: read
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -43,7 +43,7 @@ jobs:
       matrix:
         platform: ['darwin', 'linux', 'windows']
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Set up Go
       uses: actions/setup-go@v5
@@ -73,7 +73,7 @@ jobs:
     permissions:
       contents: write
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     - name: Restore cache-darwin
       uses: actions/cache@v4
