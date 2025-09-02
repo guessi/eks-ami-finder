@@ -100,6 +100,14 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 		os.Exit(1)
 	}
 
+	// Auto Mode only available for Amazon EKS 1.29 or later
+	// - https://docs.aws.amazon.com/eks/latest/userguide/create-auto.html
+	if input.AUTO_MODE && minorK8sVersion < 29 {
+		fmt.Printf("EKS Auto Mode requires Kubernetes version 1.29 or greater.\n")
+		fmt.Printf("- https://docs.aws.amazon.com/eks/latest/userguide/create-auto.html\n\n")
+		os.Exit(1)
+	}
+
 	if !input.AUTO_MODE && !slices.Contains(constants.ValidAmiTypes["DEFAULT"], input.AMI_TYPE) {
 		fmt.Printf("Invalid --ami-type input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes["DEFAULT"], ", "))
 		os.Exit(1)
