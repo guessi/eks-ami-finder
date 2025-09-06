@@ -1,5 +1,11 @@
 <!-- markdownlint-disable -->
 
+# v1.4.0 / 2025-09-07
+
+* Update region support for `ap-southeast-6`
+* Built with golang 1.24.6
+* Bump dependencies
+
 # v1.3.1 / 2025-08-18
 
 * Built with golang 1.24.6
