@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.5.0 / 2025-09-10
+
+* Bump dependencies
+
 # v1.4.0 / 2025-09-07
 
 * Update region support for `ap-southeast-6`
