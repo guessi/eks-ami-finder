@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.6.0 / 2025-10-06
+
+* Set default version to 1.34
+* Bump dependencies
+
 # v1.5.0 / 2025-09-10
 
 * Bump dependencies
