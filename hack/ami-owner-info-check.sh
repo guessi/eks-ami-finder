@@ -2,7 +2,7 @@
 
 set -uo pipefail
 
-readonly TARGET_VERSION="1.33"
+readonly TARGET_VERSION="1.34"
 readonly TARGET_VARIENT="${1:-}"
 
 error_message() {
