@@ -6,7 +6,17 @@
 [![GitHub release](https://img.shields.io/github/release/guessi/eks-ami-finder.svg)](https://github.com/guessi/eks-ami-finder/releases/latest)
 [![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/guessi/eks-ami-finder)](https://github.com/guessi/eks-ami-finder/blob/main/go.mod)
 
-Helper tool to find Amazon EKS optimized AMI IDs
+A command-line tool to find Amazon EKS optimized AMI IDs across different versions and regions.
+
+## 📋 Overview
+
+Users often need to pin their AMI to a specific version of Amazon EKS Optimized AMI for security or compliance reasons. However, AWS documentation only provides methods to retrieve the latest AMI versions:
+
+- [Retrieve recommended Amazon Linux AMI IDs](https://docs.aws.amazon.com/eks/latest/userguide/retrieve-ami-id.html)
+- [Retrieve recommended Microsoft Windows AMI IDs](https://docs.aws.amazon.com/eks/latest/userguide/retrieve-windows-ami-id.html)
+- [Retrieve recommended Bottlerocket AMI IDs](https://docs.aws.amazon.com/eks/latest/userguide/retrieve-ami-id-bottlerocket.html)
+
+`eks-ami-finder` fills this gap by providing access to historical AMI information for Amazon Linux, Windows, and Bottlerocket-based EKS optimized AMIs.
 
 ## 🔢 Prerequisites
 
