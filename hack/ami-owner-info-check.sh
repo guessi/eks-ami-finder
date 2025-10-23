@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
 
+# Script to check AMI owner IDs for EKS optimized AMIs across all AWS regions
+# Usage: ./ami-owner-info-check.sh <Bottlerocket|AmazonLinux|Windows>
+
 set -uo pipefail
 
 readonly TARGET_VERSION="1.34"
 readonly TARGET_VARIENT="${1:-}"
+
+test_aws_profile() {
+    if ! aws sts get-caller-identity >/dev/null 2>&1; then
+        error_message "AWS profile test failed. Please check your AWS credentials and configuration."
+        exit 1
+    fi
+}
 
 error_message() {
     echo "Error: $1" >&2
@@ -72,6 +82,7 @@ readonly REGIONS=(
     "us-west-2"
 )
 
+# Get AMI ID using AWS SSM parameters
 get_ami_id() {
     local VARIANT="$1"
     local REGION="$2"
@@ -149,36 +160,50 @@ process_region() {
     local REGION="$1"
     local AMI_ID=""
     local OWNER_ID=""
-
-    printf "%17s => " "${REGION}"
+    local TEMP_FILE="/tmp/ami_check_${REGION}.tmp"
 
     if ! AMI_ID=$(get_ami_id "${TARGET_VARIENT}" "${REGION}"); then
-        echo "AMI not found"
+        printf "%17s => AMI not found\n" "${REGION}" > "${TEMP_FILE}"
         return 1
     fi
 
     if ! OWNER_ID=$(get_ami_owner "${AMI_ID}" "${REGION}"); then
-        echo "Failed to retrieve owner"
+        printf "%17s => Failed to retrieve owner\n" "${REGION}" > "${TEMP_FILE}"
         return 1
     fi
 
-    echo "${OWNER_ID}"
+    printf "%17s => %s\n" "${REGION}" "${OWNER_ID}" > "${TEMP_FILE}"
     return 0
 }
 
 main() {
+    test_aws_profile
+
     local RESULT_COUNT=0
     local FAILED_COUNT=0
 
     echo "----------------------------------------------------"
-    echo "Checking AMI owners for ${TARGET_VARIENT} AMIs (${TARGET_VERSION})"
+    echo "Checking AMI owners for ${TARGET_VARIENT} AMIs (${TARGET_VERSION})" ... It might takes few seconds to run, please be patient.
     echo "----------------------------------------------------"
 
+    # Process all regions in parallel
     for TARGET_REGION in "${REGIONS[@]}"; do
-        if process_region "${TARGET_REGION}"; then
-            ((RESULT_COUNT++))
-        else
-            ((FAILED_COUNT++))
+        process_region "${TARGET_REGION}" &
+    done
+    wait
+
+    for TARGET_REGION in "${REGIONS[@]}"; do
+        local TEMP_FILE="/tmp/ami_check_${TARGET_REGION}.tmp"
+        if [[ -f "${TEMP_FILE}" ]]; then
+            local CONTENT
+            CONTENT=$(cat "${TEMP_FILE}")
+            echo "${CONTENT}"
+            if [[ "${CONTENT}" == *"=>"* ]] && [[ "${CONTENT}" != *"not found"* ]] && [[ "${CONTENT}" != *"Failed"* ]]; then
+                ((RESULT_COUNT++))
+            else
+                ((FAILED_COUNT++))
+            fi
+            rm -f "${TEMP_FILE}"
         fi
     done
 
