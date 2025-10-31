@@ -24,20 +24,68 @@ Users often need to pin their AMI to a specific version of Amazon EKS Optimized 
 
 ## 🚀 Quick start
 
+### Basic Usage
+
 ```bash
 eks-ami-finder help
 ```
 
+### Find the latest AMIs
+
 ```bash
-eks-ami-finder --release-date 202509 # for all AMIs released with specific month (prefix match)
+eks-ami-finder
+```
+
+### Find AMIs by Release Date
+
+```bash
+# Find all AMIs released in September 2025 (prefix match), with no region specify
+eks-ami-finder --release-date 202509
+
+# Find AMIs released on a specific date
+eks-ami-finder --release-date 20250920 --region us-east-1
+```
+
+### Find AMIs by Kubernetes Version
+
+```bash
+# Find AMIs for Kubernetes 1.34
+eks-ami-finder --kubernetes-version 1.34 --region us-east-1
+
+# Combine Kubernetes version with specific release date
+eks-ami-finder --kubernetes-version 1.34 --release-date 20250920 --region us-east-1
+```
+
+### Filter by AMI Type
+
+```bash
+# Find Amazon Linux 2023 AMIs
+eks-ami-finder --ami-type AL2023_x86_64_STANDARD --region us-east-1
+
+# Find Windows AMIs
+eks-ami-finder --ami-type WINDOWS_CORE_2022_x86_64 --region us-east-1
+
+# Find Bottlerocket AMIs
+eks-ami-finder --ami-type BOTTLEROCKET_x86_64 --region us-east-1
+```
+
+### Example Output
+
+```bash
+eks-ami-finder --kubernetes-version 1.34 --release-date 20250920 --region us-east-1
 
 +-----------+-----------------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+--------------------------+--------------+
 | Region    | AMI ID                | Name                                                  | Description                                                                                                   | DeprecationTime          | Architecture |
 +-----------+-----------------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+--------------------------+--------------+
 | us-east-1 | ami-0093e29064b926113 | amazon-eks-node-al2023-x86_64-standard-1.34-v20250920 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.34.1, containerd: 2.1.4-1.eks.amzn2023.0.1) | 2027-09-24T00:36:26.000Z | x86_64       |
-| us-east-1 | ami-031271ba36c0b8711 | amazon-eks-node-al2023-x86_64-standard-1.34-v20250915 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.34.0, containerd: 2.1.4-1.eks.amzn2023.0.1) | 2027-09-16T18:17:54.000Z | x86_64       |
 +-----------+-----------------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
+
+### Key Capabilities
+
+- **Historical AMI Search**: Find specific versions of EKS-optimized AMIs, not just the latest.
+- **Multi-OS Support**: Search Amazon Linux, Windows, and Bottlerocket AMIs.
+- **Flexible Filtering**: Filter by Kubernetes version, release date, AMI type, region, etc.
 
 ## :accessibility: FAQ
 
