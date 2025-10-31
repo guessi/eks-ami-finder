@@ -87,15 +87,19 @@ eks-ami-finder --kubernetes-version 1.34 --release-date 20250920 --region us-eas
 - **Multi-OS Support**: Search Amazon Linux, Windows, and Bottlerocket AMIs.
 - **Flexible Filtering**: Filter by Kubernetes version, release date, AMI type, region, etc.
 
-## :accessibility: FAQ
+## ❓ FAQ
 
-Q: How does `eks-ami-finder` lookup the AMI IDs? what's the magic behind the scene?
+### Q: How does `eks-ami-finder` look up AMI IDs?
 
-A: `eks-ami-finder` will first find out the Owner IDs of the AMI [HERE](hack/ami-owner-info-check.sh), then filter out AMI IDs that released by these Owner IDs [HERE](cmd/search.go) with patterns, just that simple!
+`eks-ami-finder` first identifies the Owner IDs of the AMIs ([source](hack/ami-owner-info-check.sh)), then filters AMI IDs released by these Owner IDs ([source](cmd/search.go)) using pattern matching. It's that simple!
 
-Q: Where can I find he definition for the value of `--ami-type` flag?
+### Q: Where can I find the definition for the `--ami-type` flag value?
 
-A: See [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegroup.html#AmazonEKS-Type-Nodegroup-amiType) definition here.
+See the [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegroup.html#AmazonEKS-Type-Nodegroup-amiType) definition in the AWS documentation.
+
+### Q: Does an AMI description guarantee it's an official build?
+
+Not necessarily. AMI descriptions like `EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.34.1, containerd: 2.1.4-1.eks.amzn2023.0.1)` can be defined by anyone. You still need to verify that it comes from the Amazon EKS team by checking the Owner ID.
 
 ## 👷 Install
 
