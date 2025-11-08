@@ -1,5 +1,12 @@
 <!-- markdownlint-disable -->
 
+# v1.7.0 / 2025-11-09
+
+* Improve error messages with version hints
+* Fix Kubernetes version validation
+* Fix AMI pagination issue
+* Bump dependencies
+
 # v1.6.0 / 2025-10-06
 
 * Set default version to 1.34
