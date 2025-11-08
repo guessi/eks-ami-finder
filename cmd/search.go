@@ -79,7 +79,7 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 
 	var majorK8sVersion, minorK8sVersion int
 	versionParts := strings.Split(input.KUBERNETES_VERSION, ".")
-	if len(versionParts) >= 2 {
+	if len(versionParts) == 2 {
 		if i, err := strconv.Atoi(versionParts[0]); err == nil {
 			majorK8sVersion = int(i)
 		}
