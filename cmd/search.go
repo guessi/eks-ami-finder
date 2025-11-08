@@ -38,6 +38,9 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 	var images []types.Image
 	var returnSize int
 
+	// Always fetch at least 50 AMIs to ensure we get recent ones after sorting
+	fetchLimit := max(maxResults*2, 50)
+
 	paginator := ec2.NewDescribeImagesPaginator(svc, input)
 	for paginator.HasMorePages() {
 		// Check for context cancellation
@@ -52,7 +55,7 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 			return nil, err
 		}
 		images = append(images, out.Images...)
-		if len(images) > maxResults {
+		if len(images) > fetchLimit {
 			break
 		}
 	}
