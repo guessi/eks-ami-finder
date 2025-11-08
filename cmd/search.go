@@ -131,7 +131,7 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 		// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-accelerated-amis-now-available/
 		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "AL2023" {
-			fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+			fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			os.Exit(1)
 		}
 
@@ -140,7 +140,7 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 		// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.0.0
 		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 		if minorK8sVersion < 15 && strings.Split(input.AMI_TYPE, "_")[0] == "BOTTLEROCKET" {
-			fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+			fmt.Printf("Invalid input: %s requires Amazon EKS 1.15 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			os.Exit(1)
 		}
 
@@ -149,7 +149,7 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 		// - https://github.com/aws/containers-roadmap/issues/69#issuecomment-539641916
 		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 		if minorK8sVersion < 14 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
-			fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+			fmt.Printf("Invalid input: %s requires Amazon EKS 1.14 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			os.Exit(1)
 		}
 
@@ -159,7 +159,7 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
 			amiTypeParts := strings.Split(input.AMI_TYPE, "_")
 			if len(amiTypeParts) >= 3 && (amiTypeParts[2] == "2019" || amiTypeParts[2] == "2022") {
-				fmt.Printf("Invalid input: there have no %s support for Amazon EKS %s.\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
 				os.Exit(1)
 			}
 		}
