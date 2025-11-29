@@ -1,5 +1,9 @@
 <!-- markdownlint-disable -->
 
+# v1.8.0 / 2025-11-29
+
+* Bump dependencies
+
 # v1.7.0 / 2025-11-09
 
 * Improve error messages with version hints
