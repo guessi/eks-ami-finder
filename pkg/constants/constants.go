@@ -171,6 +171,7 @@ var (
 	AwsAccountMappingsAutoMode = map[string]string{
 		"af-south-1":     "471112993317",
 		"ap-east-1":      "590183728416",
+		"ap-east-2":      "381492200852",
 		"ap-northeast-1": "851725346105",
 		"ap-northeast-2": "992382805010",
 		"ap-northeast-3": "891377407544",
