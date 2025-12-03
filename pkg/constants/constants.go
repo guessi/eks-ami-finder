@@ -177,7 +177,7 @@ var (
 		"ap-south-1":     "975049899075",
 		"ap-south-2":     "590183737426",
 		"ap-southeast-1": "339712723301",
-		"ap-southeast-2": "58264376476",
+		"ap-southeast-2": "058264376476",
 		"ap-southeast-3": "471112941769",
 		"ap-southeast-4": "590183863144",
 		"ap-southeast-5": "654654202513",
