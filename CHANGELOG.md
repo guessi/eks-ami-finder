@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.9.0 / 2025-12-03
+
+* Fix region support for `ap-southeast-2`
+* Add region support for `ap-east-2`
+
 # v1.8.0 / 2025-11-29
 
 * Bump dependencies
