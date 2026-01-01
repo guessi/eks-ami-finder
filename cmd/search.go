@@ -117,49 +117,65 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 	}
 
 	if !input.AUTO_MODE {
-		// AL2 AMI will no longer supported for Amazon EKS 1.33 or newer
-		// - https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html
-		if minorK8sVersion >= 33 && strings.Split(input.AMI_TYPE, "_")[0] == "AL2" {
-			fmt.Printf("There would have no AL2-based Optimized AMI support for Amazon EKS 1.33 or newer.\n\n")
-			fmt.Printf("Check the following link for more info:\n")
-			fmt.Printf("- https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html\n\n")
-			os.Exit(1)
+		if strings.HasPrefix(input.AMI_TYPE, "AL2_") {
+			// AL2 AMI will no longer supported for Amazon EKS 1.33 or newer
+			// - https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html
+			if minorK8sVersion >= 33 {
+				fmt.Printf("There would have no AL2-based Optimized AMI support for Amazon EKS 1.33 or newer.\n\n")
+				fmt.Printf("Check the following link for more info:\n")
+				fmt.Printf("- https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html\n\n")
+				os.Exit(1)
+			}
 		}
 
-		// AL2023 AMI support starting from Amazon EKS 1.23 or newer
-		// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-amis-now-available/
-		// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-accelerated-amis-now-available/
-		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
-		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "AL2023" {
-			fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-			os.Exit(1)
-		}
-
-		// Bottlerocket AMI initially support Amazon EKS 1.15 or newer
-		// - https://aws.amazon.com/blogs/containers/amazon-eks-adds-native-support-for-bottlerocket-in-managed-node-groups/
-		// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.0.0
-		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
-		if minorK8sVersion < 15 && strings.Split(input.AMI_TYPE, "_")[0] == "BOTTLEROCKET" {
-			fmt.Printf("Invalid input: %s requires Amazon EKS 1.15 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-			os.Exit(1)
-		}
-
-		// Windows Server AMI initially support Amazon EKS 1.14 or newer
-		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
-		// - https://github.com/aws/containers-roadmap/issues/69#issuecomment-539641916
-		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
-		if minorK8sVersion < 14 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
-			fmt.Printf("Invalid input: %s requires Amazon EKS 1.14 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-			os.Exit(1)
-		}
-
-		// Windows Server 2019/2022 only support Amazon EKS 1.23 or newer
-		// - https://aws.amazon.com/blogs/containers/deploying-amazon-eks-windows-managed-node-groups/
-		// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
-		if minorK8sVersion < 23 && strings.Split(input.AMI_TYPE, "_")[0] == "WINDOWS" {
-			amiTypeParts := strings.Split(input.AMI_TYPE, "_")
-			if len(amiTypeParts) >= 3 && (amiTypeParts[2] == "2019" || amiTypeParts[2] == "2022") {
+		if strings.HasPrefix(input.AMI_TYPE, "AL2023_") {
+			// AL2023 AMI support starting from Amazon EKS 1.23 or newer
+			// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-amis-now-available/
+			// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-accelerated-amis-now-available/
+			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+			if minorK8sVersion < 23 {
 				fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				os.Exit(1)
+			}
+		}
+
+		if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+			// BOTTLEROCKET NVIDIA FIPS variants only available for Kubernetes 1.29+
+			// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.51.0
+			// - https://github.com/bottlerocket-os/bottlerocket/pull/4671
+			if minorK8sVersion < 29 && strings.HasSuffix(input.AMI_TYPE, "NVIDIA_FIPS") {
+				fmt.Printf("Invalid input: %s requires Amazon EKS 1.29 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				os.Exit(1)
+			}
+
+			// Bottlerocket AMI initially support Amazon EKS 1.15 or newer
+			// - https://aws.amazon.com/blogs/containers/amazon-eks-adds-native-support-for-bottlerocket-in-managed-node-groups/
+			// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.0.0
+			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+			if minorK8sVersion < 15 {
+				fmt.Printf("Invalid input: %s requires Amazon EKS 1.15 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				os.Exit(1)
+			}
+		}
+
+		if strings.HasPrefix(input.AMI_TYPE, "WINDOWS_") {
+			// Windows Server 2019/2022 only support Amazon EKS 1.23 or newer
+			// - https://aws.amazon.com/blogs/containers/deploying-amazon-eks-windows-managed-node-groups/
+			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+			if minorK8sVersion < 23 {
+				amiTypeParts := strings.Split(input.AMI_TYPE, "_")
+				if len(amiTypeParts) >= 3 && (amiTypeParts[2] == "2019" || amiTypeParts[2] == "2022") {
+					fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
+					os.Exit(1)
+				}
+			}
+
+			// Windows Server AMI initially support Amazon EKS 1.14 or newer
+			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+			// - https://github.com/aws/containers-roadmap/issues/69#issuecomment-539641916
+			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
+			if minorK8sVersion < 14 {
+				fmt.Printf("Invalid input: %s requires Amazon EKS 1.14 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
 				os.Exit(1)
 			}
 		}
