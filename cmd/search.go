@@ -65,66 +65,42 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 	return images[:returnSize], nil
 }
 
-func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
-	// do nothing if maxResults is invalid input
-	if input.MAX_RESULTS <= 0 {
-		fmt.Printf("Can not pass --max-results with a value lower or equal to 0.\n\n")
-		os.Exit(1)
-	}
-
+func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) error {
 	if isUnsupportedRegion(ctx, input.AWS_REGION) {
-		fmt.Printf("Unable to resolve EC2 endpoint for the given region. Please check your region input.\n\n")
-		os.Exit(1)
+		return fmt.Errorf("unable to resolve EC2 endpoint for the given region. Please check your region input")
 	}
 
-	var majorK8sVersion, minorK8sVersion int
+	// Parse Kubernetes version for cross-validation
 	versionParts := strings.Split(input.KUBERNETES_VERSION, ".")
+	var minorK8sVersion int
 	if len(versionParts) == 2 {
-		if i, err := strconv.Atoi(versionParts[0]); err == nil {
-			majorK8sVersion = int(i)
-		}
 		if i, err := strconv.Atoi(versionParts[1]); err == nil {
-			minorK8sVersion = int(i)
+			minorK8sVersion = i
+		}
+	}
+
+	// Auto Mode validation
+	if input.AUTO_MODE {
+		if !slices.Contains(constants.ValidAmiTypes["AUTO_MODE"], input.AMI_TYPE) {
+			return fmt.Errorf("invalid --ami-type input for auto-mode (Valid input: %s)", strings.Join(constants.ValidAmiTypes["AUTO_MODE"], ", "))
+		}
+
+		// Auto Mode only available for Amazon EKS 1.29 or later
+		// - https://docs.aws.amazon.com/eks/latest/userguide/create-auto.html
+		if minorK8sVersion < 29 {
+			return fmt.Errorf("EKS Auto Mode requires Kubernetes version 1.29 or greater. See: https://docs.aws.amazon.com/eks/latest/userguide/create-auto.html")
 		}
 	} else {
-		fmt.Printf("Invalid Kubernetes version format. Expected format: X.Y (e.g., 1.33)\n\n")
-		os.Exit(1)
-	}
+		if !slices.Contains(constants.ValidAmiTypes["DEFAULT"], input.AMI_TYPE) {
+			return fmt.Errorf("invalid --ami-type input (Valid input: %s)", strings.Join(constants.ValidAmiTypes["DEFAULT"], ", "))
+		}
 
-	if majorK8sVersion != 1 || minorK8sVersion < 10 {
-		// the first Amazon EKS version was 1.10
-		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
-		fmt.Printf("The very first Amazon EKS version was 1.10, so there would have no Amazon EKS %s.\n\n", input.KUBERNETES_VERSION)
-		os.Exit(1)
-	}
-
-	if input.AUTO_MODE && !slices.Contains(constants.ValidAmiTypes["AUTO_MODE"], input.AMI_TYPE) {
-		fmt.Printf("Invalid --ami-type input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes["AUTO_MODE"], ", "))
-		os.Exit(1)
-	}
-
-	// Auto Mode only available for Amazon EKS 1.29 or later
-	// - https://docs.aws.amazon.com/eks/latest/userguide/create-auto.html
-	if input.AUTO_MODE && minorK8sVersion < 29 {
-		fmt.Printf("EKS Auto Mode requires Kubernetes version 1.29 or greater.\n")
-		fmt.Printf("- https://docs.aws.amazon.com/eks/latest/userguide/create-auto.html\n\n")
-		os.Exit(1)
-	}
-
-	if !input.AUTO_MODE && !slices.Contains(constants.ValidAmiTypes["DEFAULT"], input.AMI_TYPE) {
-		fmt.Printf("Invalid --ami-type input (Valid input: %s).\n\n", strings.Join(constants.ValidAmiTypes["DEFAULT"], ", "))
-		os.Exit(1)
-	}
-
-	if !input.AUTO_MODE {
+		// AMI type specific validations
 		if strings.HasPrefix(input.AMI_TYPE, "AL2_") {
-			// AL2 AMI will no longer supported for Amazon EKS 1.33 or newer
+			// AL2 AMI will no longer be supported for Amazon EKS 1.33 or newer
 			// - https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html
 			if minorK8sVersion >= 33 {
-				fmt.Printf("There would have no AL2-based Optimized AMI support for Amazon EKS 1.33 or newer.\n\n")
-				fmt.Printf("Check the following link for more info:\n")
-				fmt.Printf("- https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html\n\n")
-				os.Exit(1)
+				return fmt.Errorf("AL2-based AMI is not supported for Amazon EKS 1.33 or newer. See: https://docs.aws.amazon.com/eks/latest/userguide/eks-ami-deprecation-faqs.html")
 			}
 		}
 
@@ -134,8 +110,7 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 			// - https://aws.amazon.com/blogs/containers/amazon-eks-optimized-amazon-linux-2023-accelerated-amis-now-available/
 			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 			if minorK8sVersion < 23 {
-				fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-				os.Exit(1)
+				return fmt.Errorf("%s requires Amazon EKS 1.23 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			}
 		}
 
@@ -144,17 +119,14 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 			// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.51.0
 			// - https://github.com/bottlerocket-os/bottlerocket/pull/4671
 			if minorK8sVersion < 29 && strings.HasSuffix(input.AMI_TYPE, "NVIDIA_FIPS") {
-				fmt.Printf("Invalid input: %s requires Amazon EKS 1.29 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-				os.Exit(1)
+				return fmt.Errorf("%s requires Amazon EKS 1.29 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			}
-
 			// Bottlerocket AMI initially support Amazon EKS 1.15 or newer
 			// - https://aws.amazon.com/blogs/containers/amazon-eks-adds-native-support-for-bottlerocket-in-managed-node-groups/
 			// - https://github.com/bottlerocket-os/bottlerocket/releases/tag/v1.0.0
 			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 			if minorK8sVersion < 15 {
-				fmt.Printf("Invalid input: %s requires Amazon EKS 1.15 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-				os.Exit(1)
+				return fmt.Errorf("%s requires Amazon EKS 1.15 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			}
 		}
 
@@ -165,55 +137,47 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) {
 			if minorK8sVersion < 23 {
 				amiTypeParts := strings.Split(input.AMI_TYPE, "_")
 				if len(amiTypeParts) >= 3 && (amiTypeParts[2] == "2019" || amiTypeParts[2] == "2022") {
-					fmt.Printf("Invalid input: %s requires Amazon EKS 1.23 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-					os.Exit(1)
+					return fmt.Errorf("%s requires Amazon EKS 1.23 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
 				}
 			}
-
 			// Windows Server AMI initially support Amazon EKS 1.14 or newer
 			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 			// - https://github.com/aws/containers-roadmap/issues/69#issuecomment-539641916
-			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 			if minorK8sVersion < 14 {
-				fmt.Printf("Invalid input: %s requires Amazon EKS 1.14 or newer (you specified %s).\n\n", input.AMI_TYPE, input.KUBERNETES_VERSION)
-				os.Exit(1)
+				return fmt.Errorf("%s requires Amazon EKS 1.14 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
 			}
 		}
 	}
 
-	if releaseDate := input.RELEASE_DATE; len(releaseDate) != 0 {
-		// releaseDate is expected to have at least Year included.
-		if len(releaseDate) < 4 || len(releaseDate) > 8 {
-			fmt.Printf("Invalid --release-date passed.\n\n")
-			os.Exit(1)
-		}
+	return nil
+}
 
+func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
+	// basic validations
+	if err := simpleInputValidation(ctx, input); err != nil {
+		return err
+	}
+
+	// Additional release date validation (requires AMI type context)
+	if releaseDate := input.RELEASE_DATE; len(releaseDate) != 0 {
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
 		if year, err := strconv.Atoi(releaseDate[:4]); err != nil || year < 2018 {
-			fmt.Printf("Invalid --release-date passed.\n\n")
-			os.Exit(1)
+			return fmt.Errorf("invalid release-date. Amazon EKS was first released in 2018")
 		}
 
 		// Bottlerocket AMIs don't support release date filtering
 		if !input.AUTO_MODE && strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
-			fmt.Printf("Bottlerocket doesn't support filter by release date.\n\n")
-			os.Exit(1)
+			return fmt.Errorf("Bottlerocket doesn't support filter by release date")
 		}
 	}
-}
-
-func amiSearch(ctx context.Context, input amiSearchInputSpec) {
-	// basic validations
-	simpleInputValidation(ctx, input)
 
 	cfg, err := config.LoadDefaultConfig(
 		ctx,
 		config.WithRegion(input.AWS_REGION),
 	)
 	if err != nil {
-		fmt.Printf("unable to load SDK config, %v\n\n", err)
-		os.Exit(1)
+		return fmt.Errorf("unable to load SDK config: %v", err)
 	}
 
 	svc := ec2.NewFromConfig(cfg)
@@ -259,15 +223,13 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		if v, ok := constants.AwsAccountMappingsAutoMode[input.AWS_REGION]; ok {
 			input.AMI_OWNER_ID = v
 		} else {
-			fmt.Printf("Auto Mode might not supported in %s region.\n\n", input.AWS_REGION)
-			os.Exit(1)
+			return fmt.Errorf("Auto Mode might not be supported in %s region", input.AWS_REGION)
 		}
 
 		if patternTemplate, ok := autoModeAmiPatterns[input.AMI_TYPE]; ok {
 			pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
 		} else {
-			fmt.Printf("Invalid --ami-type input.\n\n")
-			os.Exit(1)
+			return fmt.Errorf("invalid ami-type input: %s", input.AMI_TYPE)
 		}
 	} else {
 		if patternTemplate, ok := amiPatterns[input.AMI_TYPE]; ok {
@@ -277,8 +239,7 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 				pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
 			}
 		} else {
-			fmt.Printf("Invalid --ami-type input.\n\n")
-			os.Exit(1)
+			return fmt.Errorf("invalid ami-type input: %s", input.AMI_TYPE)
 		}
 	}
 
@@ -307,25 +268,21 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 	if err != nil {
 		// Check for context cancellation first
 		if ctx.Err() != nil {
-			fmt.Printf("Request cancelled or timed out: %v\n\n", ctx.Err())
-			os.Exit(1)
+			return fmt.Errorf("request cancelled or timed out: %v", ctx.Err())
 		}
 
 		// Check for AWS-specific errors
 		var re *awshttp.ResponseError
 		if errors.As(err, &re) {
-			fmt.Printf("requestID: %s, error: %v\n\n", re.ServiceRequestID(), re.Unwrap())
-			os.Exit(1)
+			return fmt.Errorf("AWS error (requestID: %s): %v", re.ServiceRequestID(), re.Unwrap())
 		}
 
-		// Handle other errors
-		fmt.Printf("Error retrieving AMI information: %v\n\n", err)
-		os.Exit(1)
+		return fmt.Errorf("error retrieving AMI information: %v", err)
 	}
 
 	if len(images) == 0 {
 		fmt.Printf("No matching AMI found.\n\n")
-		os.Exit(0)
+		return nil
 	}
 
 	t := table.NewWriter()
@@ -365,4 +322,5 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) {
 		print(fmt.Sprintf("Filter: %s\n", pattern))
 	}
 
+	return nil
 }

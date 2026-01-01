@@ -2,9 +2,6 @@ package cmd
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"strconv"
 	"strings"
 
 	"github.com/guessi/eks-ami-finder/pkg/constants"
@@ -12,26 +9,20 @@ import (
 )
 
 func amiSearchInput(c *cli.Command) amiSearchInputSpec {
-	maxResults, err := strconv.Atoi(c.String("max-results"))
-	if err != nil {
-		fmt.Printf("Invalid --max-results value: %s. Must be a valid integer.\n\n", c.String("max-results"))
-		os.Exit(1)
-	}
-
 	return amiSearchInputSpec{
 		AWS_REGION:         c.String("region"),
 		AMI_OWNER_ID:       c.String("owner-id"),
 		AMI_TYPE:           c.String("ami-type"),
 		KUBERNETES_VERSION: c.String("kubernetes-version"),
 		RELEASE_DATE:       c.String("release-date"),
-		MAX_RESULTS:        maxResults,
+		MAX_RESULTS:        c.Int("max-results"),
 		AUTO_MODE:          c.Bool("auto-mode"),
 		INCLUDE_DEPRECATED: c.Bool("include-deprecated"),
 		DEBUG_MODE:         c.Bool("debug"),
 	}
 }
 
-func Wrapper(ctx context.Context, c *cli.Command) {
+func Wrapper(ctx context.Context, c *cli.Command) error {
 	ctx, cancel := context.WithTimeout(ctx, c.Duration("timeout"))
 	defer cancel()
 
@@ -65,5 +56,5 @@ func Wrapper(ctx context.Context, c *cli.Command) {
 		}
 	}
 
-	amiSearch(ctx, r)
+	return amiSearch(ctx, r)
 }

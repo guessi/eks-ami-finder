@@ -28,8 +28,7 @@ func main() {
 		Version: constants.GitVersion,
 		Flags:   cmd.Flags,
 		Action: func(ctx context.Context, c *cli.Command) error {
-			cmd.Wrapper(ctx, c)
-			return nil
+			return cmd.Wrapper(ctx, c)
 		},
 		Commands: []*cli.Command{
 			{
@@ -45,6 +44,7 @@ func main() {
 	}
 
 	if err := app.Run(context.Background(), os.Args); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 }
