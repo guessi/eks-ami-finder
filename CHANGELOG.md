@@ -1,5 +1,12 @@
 <!-- markdownlint-disable -->
 
+# v1.11.0 / 2026-01-16
+
+* Add support for `WINDOWS_CORE_2025_x86_64`
+* Add support for `WINDOWS_FULL_2025_x86_64`
+* Enhanced input validation
+* Bump dependencies
+
 # v1.10.0 / 2026-01-01
 
 * Add support for `BOTTLEROCKET_x86_64_NVIDIA_FIPS`
