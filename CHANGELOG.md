@@ -3,7 +3,7 @@
 # v1.10.0 / 2026-01-01
 
 * Add support for `BOTTLEROCKET_x86_64_NVIDIA_FIPS`
-* Add support for `BOTTLEROCKET_ARM_64_NVIDIA_FIPS` 
+* Add support for `BOTTLEROCKET_ARM_64_NVIDIA_FIPS`
 * Bump dependencies
 
 # v1.9.0 / 2025-12-03
