@@ -177,7 +177,7 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 
 		// Bottlerocket AMIs don't support release date filtering
 		if !input.AUTO_MODE && strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
-			return fmt.Errorf("Bottlerocket doesn't support filter by release date")
+			return fmt.Errorf("Bottlerocket doesn't support filter by release date") //lint:ignore ST1005 Error message is intentionally capitalized
 		}
 	}
 
@@ -234,7 +234,7 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 		if v, ok := constants.AwsAccountMappingsAutoMode[input.AWS_REGION]; ok {
 			input.AMI_OWNER_ID = v
 		} else {
-			return fmt.Errorf("Auto Mode might not be supported in %s region", input.AWS_REGION)
+			return fmt.Errorf("Auto Mode might not be supported in %s region", input.AWS_REGION) //lint:ignore ST1005 Error message is intentionally capitalized
 		}
 
 		if patternTemplate, ok := autoModeAmiPatterns[input.AMI_TYPE]; ok {
