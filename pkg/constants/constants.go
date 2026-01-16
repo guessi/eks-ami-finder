@@ -36,9 +36,11 @@ var (
 			"WINDOWS_CORE_2016_x86_64",
 			"WINDOWS_CORE_2019_x86_64",
 			"WINDOWS_CORE_2022_x86_64",
+			"WINDOWS_CORE_2025_x86_64",
 			"WINDOWS_FULL_2016_x86_64",
 			"WINDOWS_FULL_2019_x86_64",
 			"WINDOWS_FULL_2022_x86_64",
+			"WINDOWS_FULL_2025_x86_64",
 		},
 		// Special crafted AMI Types for Auto Mode
 		"AUTO_MODE": {

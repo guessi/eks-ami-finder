@@ -140,6 +140,15 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) error 
 					return fmt.Errorf("%s requires Amazon EKS 1.23 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
 				}
 			}
+
+			// Windows Server 2025 only support Amazon EKS 1.35 or newer
+			if minorK8sVersion < 35 {
+				amiTypeParts := strings.Split(input.AMI_TYPE, "_")
+				if len(amiTypeParts) >= 3 && amiTypeParts[2] == "2025" {
+					return fmt.Errorf("%s requires Amazon EKS 1.35 or newer (you specified %s)", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				}
+			}
+
 			// Windows Server AMI initially support Amazon EKS 1.14 or newer
 			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
 			// - https://github.com/aws/containers-roadmap/issues/69#issuecomment-539641916
@@ -214,9 +223,11 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 		"WINDOWS_CORE_2016_x86_64":        "Windows_Server-2016-English-Core-EKS_Optimized-%s-%s*",
 		"WINDOWS_CORE_2019_x86_64":        "Windows_Server-2019-English-Core-EKS_Optimized-%s-%s*",
 		"WINDOWS_CORE_2022_x86_64":        "Windows_Server-2022-English-Core-EKS_Optimized-%s-%s*",
+		"WINDOWS_CORE_2025_x86_64":        "Windows_Server-2025-English-Core-EKS_Optimized-%s-%s*",
 		"WINDOWS_FULL_2016_x86_64":        "Windows_Server-2016-English-Full-EKS_Optimized-%s-%s*",
 		"WINDOWS_FULL_2019_x86_64":        "Windows_Server-2019-English-Full-EKS_Optimized-%s-%s*",
 		"WINDOWS_FULL_2022_x86_64":        "Windows_Server-2022-English-Full-EKS_Optimized-%s-%s*",
+		"WINDOWS_FULL_2025_x86_64":        "Windows_Server-2025-English-Full-EKS_Optimized-%s-%s*",
 	}
 
 	if input.AUTO_MODE {
