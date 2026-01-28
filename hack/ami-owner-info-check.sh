@@ -5,7 +5,7 @@
 
 set -uo pipefail
 
-readonly TARGET_VERSION="1.34"
+readonly TARGET_VERSION="1.35"
 readonly TARGET_VARIENT="${1:-}"
 
 test_aws_profile() {
@@ -116,7 +116,7 @@ get_ami_id() {
             ;;
         "Windows")
             if ! AMI_ID=$(aws ssm get-parameter \
-                --name "/aws/service/ami-windows-latest/Windows_Server-2022-English-Core-EKS_Optimized-${TARGET_VERSION}/image_id" \
+                --name "/aws/service/ami-windows-latest/Windows_Server-2025-English-Core-EKS_Optimized-${TARGET_VERSION}/image_id" \
                 --region "${REGION}" \
                 --query "Parameter.Value" \
                 --output text); then

@@ -70,18 +70,18 @@ var Flags = []cli.Flag{
 	&cli.StringFlag{
 		Name:    "kubernetes-version",
 		Aliases: []string{"V"},
-		Value:   "1.34",
+		Value:   "1.35",
 		Usage:   "Kubernetes version for AMI",
 		Action: func(ctx context.Context, c *cli.Command, v string) error {
 			parts := strings.Split(v, ".")
 			if len(parts) != 2 {
-				return fmt.Errorf("invalid Kubernetes version format. Expected format: X.Y (e.g., 1.33)")
+				return fmt.Errorf("invalid Kubernetes version format. Expected format: X.Y (e.g., 1.35)")
 			}
 
 			major, err1 := strconv.Atoi(parts[0])
 			minor, err2 := strconv.Atoi(parts[1])
 			if err1 != nil || err2 != nil {
-				return fmt.Errorf("invalid Kubernetes version format. Expected format: X.Y (e.g., 1.33)")
+				return fmt.Errorf("invalid Kubernetes version format. Expected format: X.Y (e.g., 1.35)")
 			}
 
 			// The first Amazon EKS version was 1.10
