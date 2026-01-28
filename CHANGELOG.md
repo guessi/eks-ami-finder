@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.12.0 / 2026-01-28
+
+* Set default version to 1.35
+* Bump dependencies
+
 # v1.11.0 / 2026-01-16
 
 * Add support for `WINDOWS_CORE_2025_x86_64`
