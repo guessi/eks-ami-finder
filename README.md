@@ -39,7 +39,7 @@ eks-ami-finder
 ### Find AMIs by Release Date
 
 ```bash
-# Find all AMIs released in September 2025 (prefix match), with no region specify
+# Find all AMIs released in Jan 2026 (prefix match), with no region specify
 eks-ami-finder --release-date 202601
 
 # Find AMIs released on a specific date
