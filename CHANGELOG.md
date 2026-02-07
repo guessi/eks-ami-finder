@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.13.0 / 2026-02-07
+
+* Bump dependencies
+* Release new version to address new CVE - https://pkg.go.dev/vuln/GO-2026-4433
+
 # v1.12.0 / 2026-01-28
 
 * Set default version to 1.35
