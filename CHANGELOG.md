@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.14.0 / 2026-05-14
+
+* Bump dependencies
+* Add missing `us-gov-east-1` and `us-gov-west-1` support
+
 # v1.13.0 / 2026-02-07
 
 * Bump dependencies
