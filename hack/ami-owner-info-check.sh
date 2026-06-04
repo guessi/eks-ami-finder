@@ -5,7 +5,7 @@
 
 set -uo pipefail
 
-readonly TARGET_VERSION="1.35"
+readonly TARGET_VERSION="1.36"
 readonly TARGET_VARIENT="${1:-}"
 
 test_aws_profile() {
