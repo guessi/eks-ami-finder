@@ -4,6 +4,8 @@
 
 * Set default version to 1.36
 * Bump dependencies
+* Build with go1.26.4
+* Comment out ME regions
 
 # v1.14.0 / 2026-05-14
 
