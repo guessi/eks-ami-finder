@@ -332,6 +332,11 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 		return fmt.Errorf("error retrieving AMI information: %v", err)
 	}
 
+	if input.DEBUG_MODE {
+		fmt.Printf("OwnerId: %s\n", input.AMI_OWNER_ID)
+		fmt.Printf("Filter: %s\n\n", pattern)
+	}
+
 	if len(images) == 0 {
 		fmt.Printf("No matching AMI found.\n\n")
 		return nil
@@ -367,12 +372,6 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 
 	t.Style().Format.Header = text.FormatDefault
 	t.Render()
-
-	if input.DEBUG_MODE {
-		println()
-		print(fmt.Sprintf("OwerId: %s\n", input.AMI_OWNER_ID))
-		print(fmt.Sprintf("Filter: %s\n", pattern))
-	}
 
 	return nil
 }
