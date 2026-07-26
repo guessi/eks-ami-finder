@@ -39,11 +39,11 @@ eks-ami-finder
 ### Find AMIs by Release Date
 
 ```bash
-# Find all AMIs released in May 2026 (prefix match), with no region specify
-eks-ami-finder --release-date 202605
+# Find all AMIs released in Jul 2026 (prefix match), with no region specify
+eks-ami-finder --release-date 202607
 
 # Find AMIs released on a specific date
-eks-ami-finder --release-date 20260527 --region us-east-1
+eks-ami-finder --release-date 20260724 --region us-east-1
 ```
 
 ### Find AMIs by Kubernetes Version
@@ -53,7 +53,7 @@ eks-ami-finder --release-date 20260527 --region us-east-1
 eks-ami-finder --kubernetes-version 1.36 --region us-east-1
 
 # Combine Kubernetes version with specific release date
-eks-ami-finder --kubernetes-version 1.36 --release-date 20260527 --region us-east-1
+eks-ami-finder --kubernetes-version 1.36 --release-date 20260724 --region us-east-1
 ```
 
 ### Filter by AMI Type
@@ -75,14 +75,15 @@ eks-ami-finder --ami-type BOTTLEROCKET_x86_64 --region us-east-1 --kubernetes-ve
 ### Example Output
 
 ```bash
-eks-ami-finder --kubernetes-version 1.36 --release-date 202605 --region us-east-1
+eks-ami-finder --kubernetes-version 1.36 --release-date 202607 --region us-east-1
 
-+-----------+-----------------------+-------------------------------------------------------+------------------------------------------------------------------------------------------+--------------------------+--------------+
-| Region    | AMI ID                | Name                                                  | Description                                                                              | DeprecationTime          | Architecture |
-+-----------+-----------------------+-------------------------------------------------------+------------------------------------------------------------------------------------------+--------------------------+--------------+
-| us-east-1 | ami-0a8b965c6a3908fcd | amazon-eks-node-al2023-x86_64-standard-1.36-v20260527 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.1, containerd: 2.*) | 2028-05-27T16:46:37.000Z | x86_64       |
-| us-east-1 | ami-05430ac5164366283 | amazon-eks-node-al2023-x86_64-standard-1.36-v20260520 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.1, containerd: 2.*) | 2028-05-21T07:02:59.000Z | x86_64       |
-+-----------+-----------------------+-------------------------------------------------------+------------------------------------------------------------------------------------------+--------------------------+--------------+
++-----------+-----------------------+-------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+--------------------------+--------------+
+| Region    | AMI ID                | Name                                                  | Description                                                                                               | DeprecationTime          | Architecture |
++-----------+-----------------------+-------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+--------------------------+--------------+
+| us-east-1 | ami-02420b8f005b77a4d | amazon-eks-node-al2023-x86_64-standard-1.36-v20260724 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.2, containerd: 2.2.4-1.amzn2023.0.3) | 2028-07-24T06:49:52.000Z | x86_64       |
+| us-east-1 | ami-0413f2db5fc0f4b20 | amazon-eks-node-al2023-x86_64-standard-1.36-v20260714 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.2, containerd: 2.2.4-1.amzn2023.0.3) | 2028-07-14T23:11:32.000Z | x86_64       |
+| us-east-1 | ami-0d999941360091a98 | amazon-eks-node-al2023-x86_64-standard-1.36-v20260709 | EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.2, containerd: 2.2.4-1.amzn2023.0.3) | 2028-07-09T21:30:39.000Z | x86_64       |
++-----------+-----------------------+-------------------------------------------------------+-----------------------------------------------------------------------------------------------------------+--------------------------+--------------+
 ```
 
 ### Key Capabilities
@@ -103,7 +104,7 @@ See the [amiType](https://docs.aws.amazon.com/eks/latest/APIReference/API_Nodegr
 
 ### Q: Does an AMI description guarantee it's an official build?
 
-Not necessarily. AMI descriptions like `EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.1, containerd: 2.*)` can be defined by anyone. You still need to verify that it comes from the Amazon EKS team by checking the Owner ID.
+Not necessarily. AMI descriptions like `EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.36.2, containerd: 2.*)` can be defined by anyone. You still need to verify that it comes from the Amazon EKS team by checking the Owner ID.
 
 ## 👷 Install
 
