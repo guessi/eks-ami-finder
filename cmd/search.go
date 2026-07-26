@@ -100,11 +100,15 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) error 
 
 	// Parse Kubernetes version for cross-validation
 	versionParts := strings.Split(input.KUBERNETES_VERSION, ".")
-	var minorK8sVersion int
-	if len(versionParts) == 2 {
-		if i, err := strconv.Atoi(versionParts[1]); err == nil {
-			minorK8sVersion = i
-		}
+	if len(versionParts) != 2 {
+		return fmt.Errorf("invalid Kubernetes version format: %q (expected format: X.Y, e.g., 1.36)", input.KUBERNETES_VERSION)
+	}
+	if _, err := strconv.Atoi(versionParts[0]); err != nil {
+		return fmt.Errorf("invalid Kubernetes version format: %q (expected format: X.Y, e.g., 1.36)", input.KUBERNETES_VERSION)
+	}
+	minorK8sVersion, err := strconv.Atoi(versionParts[1])
+	if err != nil {
+		return fmt.Errorf("invalid Kubernetes version format: %q (expected format: X.Y, e.g., 1.36)", input.KUBERNETES_VERSION)
 	}
 
 	// Auto Mode validation
@@ -269,10 +273,13 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 	}
 
 	if input.AUTO_MODE {
-		if v, ok := constants.AwsAccountMappingsAutoMode[input.AWS_REGION]; ok {
-			input.AMI_OWNER_ID = v
-		} else {
-			return fmt.Errorf("Auto Mode might not be supported in %s region", input.AWS_REGION) //lint:ignore ST1005 Error message is intentionally capitalized
+		// Respect user-provided --owner-id; otherwise resolve from the Auto Mode account mappings
+		if input.AMI_OWNER_ID == "" {
+			if v, ok := constants.AwsAccountMappingsAutoMode[input.AWS_REGION]; ok {
+				input.AMI_OWNER_ID = v
+			} else {
+				return fmt.Errorf("Auto Mode might not be supported in %s region", input.AWS_REGION) //lint:ignore ST1005 Error message is intentionally capitalized
+			}
 		}
 
 		if patternTemplate, ok := autoModeAmiPatterns[input.AMI_TYPE]; ok {
@@ -293,6 +300,12 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 		} else {
 			return fmt.Errorf("invalid ami-type input: %s", input.AMI_TYPE)
 		}
+	}
+
+	// Guard against unmapped regions (e.g. newly launched regions not yet in the
+	// account mappings), which would otherwise silently match nothing
+	if input.AMI_OWNER_ID == "" {
+		return fmt.Errorf("unable to determine the official AMI owner ID for %s in %s, please specify --owner-id explicitly", input.AMI_TYPE, input.AWS_REGION)
 	}
 
 	filters := []types.Filter{
