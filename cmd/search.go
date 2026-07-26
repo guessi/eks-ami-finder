@@ -21,12 +21,27 @@ import (
 	"github.com/jedib0t/go-pretty/v6/text"
 )
 
+func ec2EndpointHostname(region string) string {
+	// Non-standard partitions have their own DNS suffixes
+	// - https://docs.aws.amazon.com/general/latest/gr/rande.html
+	switch {
+	case strings.HasPrefix(region, "cn-"):
+		return fmt.Sprintf("ec2.%s.amazonaws.com.cn", region)
+	case strings.HasPrefix(region, "us-isob-"):
+		return fmt.Sprintf("ec2.%s.sc2s.sgov.gov", region)
+	case strings.HasPrefix(region, "us-iso-"):
+		return fmt.Sprintf("ec2.%s.c2s.ic.gov", region)
+	default:
+		return fmt.Sprintf("ec2.%s.amazonaws.com", region)
+	}
+}
+
 func isUnsupportedRegion(ctx context.Context, region string) bool {
 	if region == "" {
 		return true
 	}
 
-	hostname := fmt.Sprintf("ec2.%s.amazonaws.com", region)
+	hostname := ec2EndpointHostname(region)
 	lookupCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
 
