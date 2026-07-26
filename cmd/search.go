@@ -214,6 +214,11 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 
 	// Additional release date validation (requires AMI type context)
 	if releaseDate := input.RELEASE_DATE; len(releaseDate) != 0 {
+		// Expected format: yyyy, yyyymm or yyyymmdd
+		if len(releaseDate) != 4 && len(releaseDate) != 6 && len(releaseDate) != 8 {
+			return fmt.Errorf("invalid release-date format. Expected [yyyy], [yyyymm] or [yyyymmdd]")
+		}
+
 		// Amazon EKS was first released back at Jun 05, 2018
 		// - https://aws.amazon.com/blogs/aws/amazon-eks-now-generally-available/
 		if year, err := strconv.Atoi(releaseDate[:4]); err != nil || year < 2018 {
