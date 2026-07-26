@@ -49,6 +49,19 @@ func isUnsupportedRegion(ctx context.Context, region string) bool {
 	return err != nil
 }
 
+// Windows AMI names carry the build date in yyyy.mm.dd format, e.g.
+// Windows_Server-2022-English-Core-EKS_Optimized-1.36-2026.06.18
+func toWindowsReleaseDate(releaseDate string) string {
+	switch len(releaseDate) {
+	case 6: // yyyymm -> yyyy.mm
+		return releaseDate[:4] + "." + releaseDate[4:]
+	case 8: // yyyymmdd -> yyyy.mm.dd
+		return releaseDate[:4] + "." + releaseDate[4:6] + "." + releaseDate[6:]
+	default: // yyyy or empty, works as-is for prefix match
+		return releaseDate
+	}
+}
+
 func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input *ec2.DescribeImagesInput, maxResults int) ([]types.Image, error) {
 	var images []types.Image
 	var returnSize int
@@ -259,9 +272,12 @@ func amiSearch(ctx context.Context, input amiSearchInputSpec) error {
 		}
 	} else {
 		if patternTemplate, ok := amiPatterns[input.AMI_TYPE]; ok {
-			if strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_") {
+			switch {
+			case strings.HasPrefix(input.AMI_TYPE, "BOTTLEROCKET_"):
 				pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION)
-			} else {
+			case strings.HasPrefix(input.AMI_TYPE, "WINDOWS_"):
+				pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, toWindowsReleaseDate(input.RELEASE_DATE))
+			default:
 				pattern = fmt.Sprintf(patternTemplate, input.KUBERNETES_VERSION, input.RELEASE_DATE)
 			}
 		} else {
