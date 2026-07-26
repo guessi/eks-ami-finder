@@ -38,7 +38,7 @@ func Wrapper(ctx context.Context, c *cli.Command) error {
 	}
 
 	// If region is specified but owner ID is missing or invalid, assume it is looking for EKS official image build
-	if len(r.AWS_REGION) > 0 && (len(r.AMI_OWNER_ID) == 0 || len(r.AMI_OWNER_ID) != 12) {
+	if len(r.AWS_REGION) > 0 && len(r.AMI_OWNER_ID) != 12 {
 		var mappings map[string]string
 		switch {
 		case strings.HasPrefix(r.AMI_TYPE, "AL2_"), strings.HasPrefix(r.AMI_TYPE, "AL2023_"):
