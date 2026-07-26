@@ -64,10 +64,6 @@ func toWindowsReleaseDate(releaseDate string) string {
 
 func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input *ec2.DescribeImagesInput, maxResults int) ([]types.Image, error) {
 	var images []types.Image
-	var returnSize int
-
-	// Always fetch at least 50 AMIs to ensure we get recent ones after sorting
-	fetchLimit := max(maxResults*2, 50)
 
 	paginator := ec2.NewDescribeImagesPaginator(svc, input)
 	for paginator.HasMorePages() {
@@ -83,14 +79,16 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 			return nil, err
 		}
 		images = append(images, out.Images...)
-		if len(images) > fetchLimit {
-			break
-		}
 	}
 
-	returnSize = min(maxResults, len(images))
+	// DescribeImages returns results in no particular order, so collect all
+	// pages and sort by creation date (newest first) before truncating,
+	// otherwise the most recent AMIs might be dropped
+	slices.SortFunc(images, func(a, b types.Image) int {
+		return strings.Compare(aws.ToString(b.CreationDate), aws.ToString(a.CreationDate))
+	})
 
-	return images[:returnSize], nil
+	return images[:min(maxResults, len(images))], nil
 }
 
 func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) error {
