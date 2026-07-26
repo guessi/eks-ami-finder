@@ -159,6 +159,16 @@ func simpleInputValidation(ctx context.Context, input amiSearchInputSpec) error 
 		}
 
 		if strings.HasPrefix(input.AMI_TYPE, "WINDOWS_") {
+			// Windows Server 2016 doesn't support containerd, which is the only
+			// runtime for officially published Amazon EKS AMIs starting from Kubernetes 1.24
+			// - https://docs.aws.amazon.com/eks/latest/userguide/dockershim-deprecation.html
+			if minorK8sVersion >= 24 {
+				amiTypeParts := strings.Split(input.AMI_TYPE, "_")
+				if len(amiTypeParts) >= 3 && amiTypeParts[2] == "2016" {
+					return fmt.Errorf("%s is not supported for Amazon EKS 1.24 or newer (you specified %s). See: https://docs.aws.amazon.com/eks/latest/userguide/dockershim-deprecation.html", input.AMI_TYPE, input.KUBERNETES_VERSION)
+				}
+			}
+
 			// Windows Server 2019/2022 only support Amazon EKS 1.23 or newer
 			// - https://aws.amazon.com/blogs/containers/deploying-amazon-eks-windows-managed-node-groups/
 			// - https://docs.aws.amazon.com/eks/latest/userguide/doc-history.html
