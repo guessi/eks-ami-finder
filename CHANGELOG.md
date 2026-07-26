@@ -1,5 +1,17 @@
 <!-- markdownlint-disable -->
 
+# v1.16.0 / 2026-07-26
+
+* Fix release date matching for Windows AMIs
+* Fix EC2 endpoint check for cn and iso regions
+* Reject Windows Server 2016 for Kubernetes 1.24 or newer
+* Sort AMIs by creation date before limiting results
+* Improve owner id and Kubernetes version checks
+* Print debug info even when no AMI found
+* Add unit tests for search helpers
+* Build with go1.26.5
+* Bump dependencies
+
 # v1.15.0 / 2026-06-04
 
 * Set default version to 1.36
