@@ -83,9 +83,14 @@ func findAmiMatches(ctx context.Context, svc ec2.DescribeImagesAPIClient, input 
 
 	// DescribeImages returns results in no particular order, so collect all
 	// pages and sort by creation date (newest first) before truncating,
-	// otherwise the most recent AMIs might be dropped
+	// otherwise the most recent AMIs might be dropped.
+	// When two AMIs share the same creation date, compare ImageId instead,
+	// so the output stays the same no matter what order the API returns
 	slices.SortFunc(images, func(a, b types.Image) int {
-		return strings.Compare(aws.ToString(b.CreationDate), aws.ToString(a.CreationDate))
+		if c := strings.Compare(aws.ToString(b.CreationDate), aws.ToString(a.CreationDate)); c != 0 {
+			return c
+		}
+		return strings.Compare(aws.ToString(a.ImageId), aws.ToString(b.ImageId))
 	})
 
 	return images[:min(maxResults, len(images))], nil
