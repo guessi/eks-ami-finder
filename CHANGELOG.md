@@ -1,5 +1,11 @@
 <!-- markdownlint-disable -->
 
+# v1.17.0 / 2026-10-05
+
+* Set default version to 1.37
+* Build with go1.26.8
+* Bump dependencies
+
 # v1.16.0 / 2026-07-26
 
 * Fix release date matching for Windows AMIs
