@@ -1,5 +1,10 @@
 <!-- markdownlint-disable -->
 
+# v1.18.0 / 2026-10-22
+
+* Build with go1.27.3
+* Bump dependencies
+
 # v1.17.0 / 2026-10-05
 
 * Set default version to 1.37
